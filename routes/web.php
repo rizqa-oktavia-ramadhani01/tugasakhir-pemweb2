@@ -6,6 +6,7 @@ use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\LearningContentController;
 use App\Http\Controllers\ChildController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\SettingController;
 
 Route::get('/', function () {
     return view('splash');
@@ -29,4 +30,4 @@ Route::resource('learning-contents', LearningContentController::class);
 Route::middleware('auth')->group(function () {
     Route::resource('children', ChildController::class);
 });
-Route::middleware('auth')->get('/dashboard', [DashboardController::class, 'index']);
+Route::middleware('auth')->get('/setting', [SettingController::class, 'index']);

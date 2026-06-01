@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class SettingController extends Controller
+class LogOutController extends Controller
 {
     public function index()
     {
-        return view('setting.index');
+        return view('logout.index');
     }
 }
