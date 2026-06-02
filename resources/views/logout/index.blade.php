@@ -76,7 +76,7 @@
                     </button>
 
                     <!-- Tombol Batal / Kembali - PERBAIKAN: gunakan named route -->
-                    <a href="{{ route('setting') }}" class="w-full py-3 px-4 bg-white border border-gray-300 text-gray-600 font-bold rounded-xl hover:bg-gray-50 hover:text-gray-800 transition-all text-center">
+                    <a href="{{ url()->previous() }}" class="w-full py-3 px-4 bg-white border border-gray-300 text-gray-600 font-bold rounded-xl hover:bg-gray-50 hover:text-gray-800 transition-all text-center">
                         Batal, Kembali ke Beranda
                     </a>
                 </div>

@@ -374,16 +374,21 @@
             </div>
 
             <!-- FOOTER HORIZONTAL: Pengaturan, Profil, Keluar -->
+            <!-- Di sidebar-footer -->
             <div class="sidebar-footer">
-                <a href="#" class="footer-link">
-                    <i class="fa-solid fa-gear"></i>
-                    <span>Pengaturan</span>
-                </a>
-                <a href="#" class="footer-link">
+                <!-- Link ke Profile (dulu setting) -->
+                <a href="{{ route('profile') }}" class="footer-link">
                     <i class="fa-regular fa-circle-user"></i>
                     <span>Profil</span>
                 </a>
-                <a href="{{ url('/logout') }}" class="footer-link logout">
+
+                <!-- Link ke Setting (baru) -->
+                <a href="{{ route('setting.index') }}" class="footer-link">
+                    <i class="fa-solid fa-gear"></i>
+                    <span>Pengaturan</span>
+                </a>
+
+                <a href="{{ route('logout.confirm') }}" class="footer-link logout">
                     <i class="fa-solid fa-right-from-bracket"></i>
                     <span>Keluar</span>
                 </a>
