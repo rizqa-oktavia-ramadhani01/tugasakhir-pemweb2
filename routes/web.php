@@ -26,7 +26,6 @@ Route::get('/auth', function () {
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
-<<<<<<< HEAD
 Route::post('/logout', [AuthController::class, 'logout']);
 
 Route::middleware(['auth'])->group(function () {
@@ -39,7 +38,6 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('activities', ActivityController::class);
 
     Route::resource('learning-contents', LearningContentController::class);
-=======
 
 // ==================== ROUTE LOGOUT ====================
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -99,5 +97,4 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/learning-contents/{id}/edit', [AdminLearningContentController::class, 'edit'])->name('admin.learning-contents.edit');
     Route::put('/learning-contents/{id}', [AdminLearningContentController::class, 'update'])->name('admin.learning-contents.update');
     Route::delete('/learning-contents/{id}', [AdminLearningContentController::class, 'destroy'])->name('admin.learning-contents.destroy');
->>>>>>> 69943ae362038672b0af4569b0292344e936faed
 });
