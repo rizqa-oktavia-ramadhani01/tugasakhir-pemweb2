@@ -25,16 +25,16 @@ class Children extends Model
 
     public function dailyTodos()
     {
-        return $this->hasMany(DailyTodo::class);
+        return $this->hasMany(DailyTodo::class, 'child_id');
     }
 
     public function journals()
     {
-        return $this->hasMany(ParentJournal::class);
+        return $this->hasMany(ParentJournal::class, 'child_id');
     }
 
     public function childMilestones()
     {
-        return $this->hasMany(ChildMilestone::class);
+        return $this->hasMany(ChildMilestone::class, 'child_id');
     }
 }

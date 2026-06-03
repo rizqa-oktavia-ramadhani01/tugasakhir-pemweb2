@@ -15,18 +15,18 @@ Route::get('/auth', function () {
     return view('auth.auth');
 })->name('auth');
 
-Route::post('/login', [AuthController::class,'login']);
-Route::post('/register', [AuthController::class,'register']);
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/logout', [AuthController::class, 'logout']);
 
-Route::post('/logout', [AuthController::class,'logout']);
+Route::middleware(['auth'])->group(function () {
 
-Route::get('/dashboard', function () {
-    return "Dashboard TUTURO";
-})->middleware('auth');
+    Route::get('/dashboard', [DashboardController::class, 'index'])
+        ->name('dashboard');
 
-Route::resource('activities', ActivityController::class);
-Route::resource('learning-contents', LearningContentController::class);
-Route::middleware('auth')->group(function () {
     Route::resource('children', ChildController::class);
+
+    Route::resource('activities', ActivityController::class);
+
+    Route::resource('learning-contents', LearningContentController::class);
 });
-Route::middleware('auth')->get('/dashboard', [DashboardController::class, 'index']);
