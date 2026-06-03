@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Konfirmasi Keluar - TUTURO</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts (Nunito) -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #F8FAFC;
+        }
+        
+        @keyframes bounce-slow {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+        
+        .animate-bounce-slow {
+            animation: bounce-slow 1.5s ease-in-out infinite;
+        }
+    </style>
+</head>
+
+<body class="flex items-center justify-center min-h-screen text-gray-800 p-4">
+
+    <!-- Container Halaman Logout -->
+    <div class="bg-white rounded-2xl shadow-lg border border-gray-100 w-full max-w-md overflow-hidden transform transition-all duration-500 ease-out">
+
+        <!-- Header dengan Logo -->
+        <div class="bg-indigo-50 p-6 flex flex-col items-center justify-center border-b border-indigo-100">
+            <div class="flex items-center gap-2 text-indigo-600 font-bold text-3xl mb-2">
+                <i class="fa-solid fa-shapes"></i>
+                <span>TUTURO</span>
+            </div>
+            <p class="text-sm text-indigo-400 font-medium">Platform Tumbuh Kembang Anak</p>
+        </div>
+
+        <!-- Konten Utama -->
+        <div class="p-8 text-center">
+
+            <!-- Ikon Peringatan -->
+            <div class="mx-auto flex items-center justify-center h-20 w-20 rounded-full bg-red-50 mb-6 animate-bounce-slow">
+                <i class="fa-solid fa-right-from-bracket text-red-500 text-3xl"></i>
+            </div>
+
+            <h2 class="text-2xl font-bold text-gray-900 mb-2">Keluar Akun?</h2>
+            <p class="text-gray-500 mb-8 leading-relaxed">
+                Apakah Anda yakin ingin mengakhiri sesi? <br>
+                Anda perlu login kembali untuk melihat progres <strong>Aria Wijaya</strong>.
+            </p>
+
+            <!-- PERBAIKAN: Form Logout menggunakan route yang benar -->
+            <form action="{{ route('logout') }}" method="POST">
+                @csrf
+
+                <div class="flex flex-col gap-3">
+                    <!-- Tombol Konfirmasi Logout -->
+                    <button type="submit" class="w-full py-3 px-4 bg-red-500 hover:bg-red-600 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 group">
+                        <i class="fa-solid fa-power-off group-hover:rotate-90 transition-transform"></i>
+                        Ya, Keluar Sekarang
+                    </button>
+
+                    <!-- Tombol Batal / Kembali - PERBAIKAN: gunakan named route -->
+                    <a href="{{ url()->previous() }}" class="w-full py-3 px-4 bg-white border border-gray-300 text-gray-600 font-bold rounded-xl hover:bg-gray-50 hover:text-gray-800 transition-all text-center">
+                        Batal, Kembali ke Beranda
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Footer Kecil -->
+        <div class="bg-gray-50 p-4 text-center border-t border-gray-100">
+            <p class="text-xs text-gray-400">
+                &copy; 2026 TUTURO. Dilindungi hak cipta.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const card = document.querySelector('.bg-white');
+            card.classList.add('opacity-0', 'translate-y-4');
+            setTimeout(() => {
+                card.classList.remove('opacity-0', 'translate-y-4');
+                card.classList.add('transition-all', 'duration-500', 'ease-out');
+            }, 100);
+        });
+    </script>
+</body>
+
+</html>

@@ -47,10 +47,13 @@ class AuthController extends Controller
         return back()->with('error', 'Login gagal');
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
         Auth::logout();
-
-        return redirect('/login');
+        
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        
+        return redirect('/')->with('message', 'Logout berhasil!');
     }
 }

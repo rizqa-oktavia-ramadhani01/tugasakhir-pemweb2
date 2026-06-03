@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tambah Learning Content - Admin TUTURO</title>
+    <title>Edit Learning Content - Admin TUTURO</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -47,31 +47,30 @@
             </div>
 
             <div class="bg-white rounded-lg shadow p-6 max-w-2xl mx-auto">
-                <h1 class="text-2xl font-bold mb-6">Tambah Learning Content</h1>
+                <h1 class="text-2xl font-bold mb-6">Edit Learning Content</h1>
 
-                <!-- ACTION mengarah ke route ADMIN -->
-                <form action="{{ route('admin.learning-contents.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('admin.learning-contents.update', $content->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
+                    @method('PUT')
 
                     <!-- Judul -->
                     <div class="mb-4">
                         <label class="block text-gray-700 font-semibold mb-2">Judul</label>
-                        <input type="text" name="judul" 
-                               class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-indigo-500"
+                        <input type="text" name="judul" value="{{ $content->judul }}" 
+                               class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                                required>
                     </div>
 
-                    <!-- Kategori - PAKAI VALUE YANG SAMA DENGAN MIGRATION (Sound_Imitation) -->
+                    <!-- Kategori -->
                     <div class="mb-4">
                         <label class="block text-gray-700 font-semibold mb-2">Kategori</label>
                         <select name="kategori" 
-                                class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-indigo-500"
+                                class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                                 required>
-                            <option value="">Pilih Kategori</option>
-                            <option value="Pronunciation">Pronunciation</option>
-                            <option value="Sound_Imitation">Sound Imitation</option>  <!-- ← underscore -->
-                            <option value="artikel">Artikel</option>
-                            <option value="storytelling">Storytelling</option>
+                            <option value="Pronunciation" {{ $content->kategori == 'Pronunciation' ? 'selected' : '' }}>Pronunciation</option>
+                            <option value="Sound Imitation" {{ $content->kategori == 'Sound Imitation' ? 'selected' : '' }}>Sound Imitation</option>
+                            <option value="Artikel" {{ $content->kategori == 'Artikel' ? 'selected' : '' }}>Artikel</option>
+                            <option value="Storytelling" {{ $content->kategori == 'Storytelling' ? 'selected' : '' }}>Storytelling</option>
                         </select>
                     </div>
 
@@ -79,42 +78,57 @@
                     <div class="mb-4">
                         <label class="block text-gray-700 font-semibold mb-2">Deskripsi</label>
                         <textarea name="deskripsi" rows="3" 
-                                  class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-indigo-500"></textarea>
+                                  class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                                  required>{{ $content->deskripsi }}</textarea>
                     </div>
 
                     <!-- Isi -->
                     <div class="mb-4">
                         <label class="block text-gray-700 font-semibold mb-2">Isi Konten</label>
                         <textarea name="isi" rows="5" 
-                                  class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-indigo-500"
-                                  required></textarea>
+                                  class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                                  required>{{ $content->isi }}</textarea>
                     </div>
 
                     <!-- Gambar -->
                     <div class="mb-4">
                         <label class="block text-gray-700 font-semibold mb-2">Gambar</label>
+                        @if($content->gambar)
+                            <div class="mb-2 p-2 bg-gray-100 rounded-lg">
+                                <p class="text-sm text-gray-600">Gambar saat ini:</p>
+                                <img src="{{ asset('storage/' . $content->gambar) }}" alt="Gambar" class="w-32 h-32 object-cover rounded mt-1">
+                            </div>
+                        @endif
                         <input type="file" name="gambar" 
                                class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-indigo-500"
                                accept="image/*">
-                        <p class="text-xs text-gray-500 mt-1">Format: JPG, PNG, GIF. Maksimal 2MB</p>
+                        <p class="text-xs text-gray-500 mt-1">Kosongkan jika tidak ingin mengubah gambar</p>
                     </div>
 
                     <!-- Audio -->
                     <div class="mb-4">
                         <label class="block text-gray-700 font-semibold mb-2">Audio</label>
+                        @if($content->audio)
+                            <div class="mb-2 p-2 bg-gray-100 rounded-lg">
+                                <p class="text-sm text-gray-600">Audio saat ini:</p>
+                                <audio controls class="mt-1">
+                                    <source src="{{ asset('storage/' . $content->audio) }}" type="audio/mpeg">
+                                </audio>
+                            </div>
+                        @endif
                         <input type="file" name="audio" 
                                class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-indigo-500"
                                accept="audio/*">
-                        <p class="text-xs text-gray-500 mt-1">Format: MP3, WAV, AAC</p>
+                        <p class="text-xs text-gray-500 mt-1">Kosongkan jika tidak ingin mengubah audio</p>
                     </div>
 
                     <!-- Tombol -->
                     <div class="flex gap-3 mt-6">
-                        <button type="submit" class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition">
-                            <i class="fa-solid fa-save"></i> Simpan
+                        <button type="submit" class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition">
+                            <i class="fa-solid fa-save"></i> Update
                         </button>
                         <a href="{{ route('admin.learning-contents.index') }}" class="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600 transition">
-                            Batal
+                            <i class="fa-solid fa-times"></i> Batal
                         </a>
                     </div>
                 </form>
