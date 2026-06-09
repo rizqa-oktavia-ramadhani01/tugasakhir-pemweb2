@@ -7,6 +7,8 @@
     <title>TUTURO</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
 
     <style>
         body {
@@ -137,40 +139,34 @@
 
             </div>
 
-            <a href="{{ route('dashboard') }}" class="menu-link menu-active">
-
-                🏠 Dashboard Utama
-
+            <a href="{{ url('/dashboard') }}" class="menu-link menu-active">
+                <i class="bi bi-house-door-fill me-2"></i>
+                Dashboard Utama
             </a>
 
             <a href="{{ route('children.index') }}" class="menu-link">
-
-                👤 Profil Tumbuh Anak
-
+                <i class="bi bi-person-fill me-2"></i>
+                Profil Tumbuh Anak
             </a>
 
             <a href="{{ route('activities.index') }}" class="menu-link">
-
-                ☑️ Rencana Harian
-
+                <i class="bi bi-calendar-check-fill me-2"></i>
+                Rencana Harian
             </a>
 
             <a href="#" class="menu-link">
-
-                ✨ Rekomendasi Pintar
-
+                <i class="bi bi-lightbulb-fill me-2"></i>
+                Rekomendasi Pintar
             </a>
 
             <a href="#" class="menu-link">
-
-                📅 Jurnal Harian Ortu
-
+                <i class="bi bi-journal-text me-2"></i>
+                Jurnal Harian Ortu
             </a>
 
             <a href="#" class="menu-link">
-
-                📊 Pantau Progres
-
+                <i class="bi bi-bar-chart-fill me-2"></i>
+                Pantau Progres
             </a>
 
         </div>
@@ -328,8 +324,9 @@
     <div class="main-content">
 
         <div class="topbar">
-            <h1 class="fw-bold">
-                Halo, Orang Tua 👋
+            <h1 class="fw-bold d-flex align-items-center">
+                <i class="bi bi-person-circle me-3 text-success fs-2"></i>
+                <span>Halo, {{ Auth::user()->name }}</span>
             </h1>
 
             <div class="text-secondary">
