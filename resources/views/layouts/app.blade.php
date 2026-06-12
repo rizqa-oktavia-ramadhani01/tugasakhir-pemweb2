@@ -1,345 +1,409 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TUTURO</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>TUTURO - @yield('title', 'Dashboard Orang Tua & Anak')</title>
 
+    <!-- Bootstrap 5 CSS (WAJIB untuk dashboard) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-
     <style>
-        body {
-            background: #f5f7fb;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8FAFC;
+            color: #1E293B;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Layout Utama */
+        .app-container {
+            display: flex;
+            height: 100vh;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        /* ========= SIDEBAR STYLE ========= */
         .sidebar {
             width: 280px;
-            min-height: 100vh;
-            background: #ffffff;
-            border-right: 1px solid #e9ecef;
-            position: fixed;
+            background-color: #FFFFFF;
+            border-right: 1px solid #E2E8F0;
             display: flex;
             flex-direction: column;
+            flex-shrink: 0;
+            z-index: 10;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.02);
         }
 
-        .menu-link {
-            display: block;
-            padding: 16px 18px;
-            margin-bottom: 10px;
-            border-radius: 18px;
+        /* Logo Area */
+        .logo-area {
+            padding: 1.5rem 1.25rem;
+            border-bottom: 1px solid #F1F5F9;
+            margin-bottom: 0.25rem;
+        }
+
+        .logo-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 800;
+            font-size: 1.6rem;
+            color: #4F46E5;
+        }
+
+        .logo-wrapper i {
+            font-size: 1.8rem;
+        }
+
+        .logo-wrapper span {
+            background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        /* Area Scroll Navigasi */
+        .nav-scroll {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0.75rem 0.875rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        /* Kategori Menu */
+        .nav-category {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .category-title {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+            color: #94A3B8;
+            padding-left: 0.75rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            padding: 0.7rem 1rem;
+            border-radius: 12px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #475569;
+            transition: all 0.2s ease;
             text-decoration: none;
-            color: #7182a3;
-            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .nav-item i {
+            width: 1.4rem;
+            text-align: center;
+            font-size: 1.1rem;
+            transition: transform 0.2s ease;
+        }
+
+        .nav-item:hover {
+            background: #EEF2FF;
+            color: #4F46E5;
+        }
+
+        .nav-item:hover i {
+            transform: scale(1.05);
+        }
+
+        .nav-item.active {
+            background: #EEF2FF;
+            color: #4F46E5;
             font-weight: 600;
-            transition: 0.3s;
+            border-left: 3px solid #4F46E5;
+            border-radius: 12px;
         }
 
-        .menu-link:hover {
-            background: #eefaf5;
-            color: #008f6a;
+        /* Sidebar Footer Horizontal */
+        .sidebar-footer {
+            padding: 1rem 1.25rem;
+            border-top: 1px solid #F1F5F9;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        .menu-active {
-            background: #dff5eb;
-            color: #008f6a;
-        }
-
-        body {
-            background: #f5f7fb;
-        }
-
-        .sidebar {
-            width: 280px;
-            min-height: 100vh;
-            background: #ffffff;
-            border-right: 1px solid #e9ecef;
-            position: fixed;
+        .footer-link {
             display: flex;
             flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+            text-decoration: none;
+            color: #64748B;
+            font-size: 0.7rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            padding: 0.4rem 0.6rem;
+            border-radius: 10px;
+            flex: 1;
+            text-align: center;
         }
 
+        .footer-link i {
+            font-size: 1.1rem;
+        }
+
+        .footer-link:hover {
+            background: #F1F5F9;
+            color: #4F46E5;
+        }
+
+        .footer-link.logout:hover {
+            color: #EF4444;
+            background: #FEF2F2;
+        }
+
+        /* Main Content */
         .main-content {
-            margin-left: 280px;
-            min-height: 100vh;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+            background-color: #F8FAFC;
         }
 
-        .topbar {
-            background: white;
-            padding: 25px 40px;
-            border-bottom: 1px solid #e5e7eb;
+        /* Header */
+        .top-header {
+            height: 70px;
+            background-color: #FFFFFF;
+            border-bottom: 1px solid #E2E8F0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            flex-shrink: 0;
         }
 
-        .menu-link {
-            display: block;
-            padding: 16px 18px;
-            margin-bottom: 10px;
-            border-radius: 18px;
-            text-decoration: none;
-            color: #7182a3;
-            font-size: 18px;
-            font-weight: 600;
-            transition: 0.3s;
+        .greeting h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #0F172A;
         }
 
-        .menu-link:hover {
-            background: #eefaf5;
-            color: #008f6a;
+        .greeting p {
+            font-size: 0.75rem;
+            color: #64748B;
+            font-weight: 500;
         }
 
-        .menu-active {
-            background: #dff5eb;
-            color: #008f6a;
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        .notification-btn {
+            position: relative;
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            color: #94A3B8;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .notification-btn:hover {
+            color: #4F46E5;
+        }
+
+        .badge-dot {
+            position: absolute;
+            top: -2px;
+            right: -4px;
+            width: 8px;
+            height: 8px;
+            background-color: #EF4444;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        .avatar {
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg, #4F46E5, #818CF8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        /* Scroll Area Main */
+        .main-scroll {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem 2rem;
+        }
+
+        /* Custom scroll */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #F1F5F9;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 4px;
         }
     </style>
 </head>
 
 <body>
-    <div class="sidebar">
-
-        <div class="p-4">
-
-            <div class="d-flex align-items-center mb-5">
-
-                <div style="
-                width:48px;
-                height:48px;
-                border-radius:14px;
-                background:#00c781;
-                color:white;
-                font-size:28px;
-                font-weight:bold;
-                display:flex;
-                align-items:center;
-                justify-content:center;">
-                    T
+    <div class="app-container">
+        <!-- SIDEBAR MENU -->
+        <aside class="sidebar">
+            <!-- Logo Area -->
+            <div class="logo-area">
+                <div class="logo-wrapper">
+                    <i class="fa-solid fa-shapes"></i>
+                    <span>TUTURO</span>
                 </div>
-
-                <div class="ms-3">
-
-                    <h2 class="fw-bold mb-0" style="color:#005f56;">
-                        TUTURO
-                    </h2>
-
-                    <small class="text-secondary fw-semibold">
-                        TEMAN TUMBUH
-                    </small>
-
-                </div>
-
             </div>
 
-            <div class="mb-4">
-
-                <span class="fw-bold text-secondary">
-                    AREA ORANG TUA
-                </span>
-
-            </div>
-
-            <a href="{{ url('/dashboard') }}" class="menu-link menu-active">
-                <i class="bi bi-house-door-fill me-2"></i>
-                Dashboard Utama
-            </a>
-
-            <a href="{{ route('children.index') }}" class="menu-link">
-                <i class="bi bi-person-fill me-2"></i>
-                Profil Tumbuh Anak
-            </a>
-
-            <a href="{{ route('activities.index') }}" class="menu-link">
-                <i class="bi bi-calendar-check-fill me-2"></i>
-                Rencana Harian
-            </a>
-
-            <a href="#" class="menu-link">
-                <i class="bi bi-lightbulb-fill me-2"></i>
-                Rekomendasi Pintar
-            </a>
-
-            <a href="#" class="menu-link">
-                <i class="bi bi-journal-text me-2"></i>
-                Jurnal Harian Ortu
-            </a>
-
-            <a href="#" class="menu-link">
-                <i class="bi bi-bar-chart-fill me-2"></i>
-                Pantau Progres
-            </a>
-
-        </div>
-
-        <div class="d-flex justify-content-between align-items-center mb-3">
-
-            <span class="fw-bold text-secondary">
-                AREA ANAK (1-5 TAHUN)
-            </span>
-
-            <span class="badge rounded-pill" style="background:#fff3e8;color:#ff8a3d;">
-                Bermain
-            </span>
-
-        </div>
-
-
-
-        <a href="{{ route('learning-contents.index') }}" class="menu-link">
-
-            🔊 Latih Pelafalan
-
-        </a>
-
-        <a href="{{ route('learning-contents.index') }}" class="menu-link">
-
-            🎤 Tiru Suara Ceria
-
-        </a>
-
-        <a href="{{ route('learning-contents.index') }}" class="menu-link">
-
-            🏆 Tantangan Bahasa
-
-        </a>
-
-        <div class="mt-auto p-4 border-top">
-
-            <div class="card border-0" style="background:#f3f5f9; border-radius:18px;">
-
-                <div class="card border-0" style="background:#f3f5f9;border-radius:18px;">
-
-                    <div class="card-body d-flex align-items-center">
-
-                        <div style="
-            width:52px;
-            height:52px;
-            border-radius:50%;
-            background:#fff4e6;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            font-weight:bold;
-            color:#ff6b00;">
-
-                            A
-
-                        </div>
-
-                        <div class="ms-3">
-
-                            <div class="fw-bold">
-                                {{ $child->nama_anak ?? 'Nama Anak' }}
-                            </div>
-
-                            <small class="text-secondary">
-                                Usia {{ $child->usia_anak ?? '-' }} Tahun
-                            </small>
-
-                        </div>
-
+            <!-- Area Navigasi (Scroll) -->
+            <div class="nav-scroll">
+                <!-- ===== FITUR ORANG TUA ===== -->
+                <div class="nav-category">
+                    <div class="category-title">
+                        <i class="fa-regular fa-user mr-1"></i> Orang Tua
                     </div>
-
-                </div>
-
-                <div class="d-flex justify-content-around mt-4 text-center">
-
-                    <a href="#" class="text-decoration-none text-secondary">
-
-                        <div style="font-size:24px;">⚙️</div>
-
-                        <small>Setelan</small>
-
+                    <a href="{{ route('dashboard') }}" class="nav-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                        <i class="fa-solid fa-house"></i>
+                        <span>Dashboard Utama</span>
                     </a>
-
-                    <a href="#" class="text-decoration-none text-secondary">
-
-                        <div style="font-size:24px;">👤</div>
-
-                        <small>Profil</small>
-
+                    <a href="{{ route('children.index') }}" class="nav-item {{ request()->routeIs('children.*') ? 'active' : '' }}">
+                        <i class="fa-solid fa-baby"></i>
+                        <span>Personal Tumbuh Anak</span>
                     </a>
-
-                    <form method="POST" action="{{ url('/logout') }}">
-
-                        @csrf
-
-                        <button type="submit" style="border:none;background:none;color:#dc3545;">
-
-                            <div style="font-size:24px;">🚪</div>
-
-                            <small>Keluar</small>
-
-                        </button>
-
-                    </form>
-
+                    <a href="{{ route('activities.index') }}" class="nav-item {{ request()->routeIs('activities.*') ? 'active' : '' }}">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <span>Rencana Harian</span>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <i class="fa-solid fa-book-open"></i>
+                        <span>Jurnal Harian Ortu</span>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <i class="fa-regular fa-calendar-check"></i>
+                        <span>Pantau Progres</span>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <i class="fa-solid fa-newspaper"></i>
+                        <span>Pusat Edukasi</span>
+                    </a>
                 </div>
 
-
-                <div class="card-body d-flex align-items-center">
-
-                    <div style="
-                    width:52px;
-                    height:52px;
-                    border-radius:50%;
-                    background:#fff4e6;
-                    display:flex;
-                    align-items:center;
-                    justify-content:center;
-                    font-weight:bold;
-                    color:#ff6b00;">
-
-                        A
-
+                <!-- ===== FITUR ANAK ===== -->
+                <div class="nav-category">
+                    <div class="category-title">
+                        <i class="fa-regular fa-face-smile mr-1"></i> Fitur Anak
                     </div>
-
-                    <div class="ms-3">
-
-                        <div class="fw-bold">
-
-                            {{ $child->nama_anak ?? 'Nama Anak' }}
-
-                        </div>
-
-                        <small class="text-secondary">
-
-                            Usia
-                            {{ $child->usia_anak ?? '-' }}
-                            Tahun
-
-                        </small>
-
-                    </div>
-
+                    <a href="{{ route('learning-contents.index') }}" class="nav-item">
+                        <i class="fa-solid fa-microphone-alt"></i>
+                        <span>Latih Pelafalan</span>
+                    </a>
+                    <a href="{{ route('learning-contents.index') }}" class="nav-item">
+                        <i class="fa-solid fa-ear-listen"></i>
+                        <span>Sound Imitation</span>
+                    </a>
+                    <a href="{{ route('learning-contents.index') }}" class="nav-item">
+                        <i class="fa-solid fa-comments"></i>
+                        <span>Tantangan Bahasa</span>
+                    </a>
                 </div>
-
             </div>
 
-        </div>
+            <!-- FOOTER HORIZONTAL: Profil, Pengaturan, Keluar -->
+            <div class="sidebar-footer">
+                <a href="{{ route('profile') }}" class="footer-link">
+                    <i class="fa-regular fa-circle-user"></i>
+                    <span>Profil</span>
+                </a>
+                <a href="{{ route('setting.index') }}" class="footer-link">
+                    <i class="fa-solid fa-gear"></i>
+                    <span>Pengaturan</span>
+                </a>
+                <a href="{{ route('logout.confirm') }}" class="footer-link logout">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span>Keluar</span>
+                </a>
+            </div>
+        </aside>
 
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <!-- Top Header -->
+            <header class="top-header">
+                <div class="greeting">
+                    <h1>Halo, {{ Auth::user()->name }}</h1>
+                    <p>{{ now()->translatedFormat('l, d F Y') }}</p>
+                </div>
+                <div class="header-actions">
+                    <button class="notification-btn">
+                        <i class="fa-regular fa-bell"></i>
+                        <span class="badge-dot"></span>
+                    </button>
+                    <div class="avatar">
+                        {{ substr(Auth::user()->name ?? 'U', 0, 1) }}
+                    </div>
+                </div>
+            </header>
+
+            <!-- Scrollable Content -->
+            <div class="main-scroll">
+                @yield('content')
+            </div>
+        </main>
     </div>
 
-
-    <div class="main-content">
-
-        <div class="topbar">
-            <h1 class="fw-bold d-flex align-items-center">
-                <i class="bi bi-person-circle me-3 text-success fs-2"></i>
-                <span>Halo, {{ Auth::user()->name }}</span>
-            </h1>
-
-            <div class="text-secondary">
-                {{ now()->format('d F Y') }}
-            </div>
-        </div>
-
-        <div class="p-4">
-            @yield('content')
-        </div>
-
-    </div>
-
+    <script>
+        // Set dynamic date
+        const dateElement = document.querySelector('.greeting p');
+        if (dateElement) {
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const today = new Date().toLocaleDateString('id-ID', options);
+            dateElement.textContent = today;
+        }
+    </script>
+    @stack('scripts')
 </body>
-
 </html>

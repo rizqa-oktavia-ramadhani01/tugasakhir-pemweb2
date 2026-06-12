@@ -40,8 +40,13 @@ class AuthController extends Controller
 
             $request->session()->regenerate();
 
+            // CEK ROLE: jika admin, redirect ke admin dashboard
+            if (Auth::user()->role === 'admin') {
+                return redirect()->route('admin.dashboard');
+            }
+
+            // selain admin (parent), redirect ke children index
             return redirect()->route('children.index');
-            
         }
 
         return back()->with('error', 'Login gagal');

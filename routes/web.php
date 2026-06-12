@@ -41,6 +41,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard');
 
+    Route::get('/switch-child/{id}', [DashboardController::class, 'switchChild'])->name('switch.child');
+
     Route::resource('children', ChildController::class);
     Route::resource('activities', ActivityController::class);
     Route::resource('learning-contents', LearningContentController::class);

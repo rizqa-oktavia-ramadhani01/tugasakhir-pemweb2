@@ -61,10 +61,23 @@
             <h2 class="text-2xl font-bold text-gray-900 mb-2">Keluar Akun?</h2>
             <p class="text-gray-500 mb-8 leading-relaxed">
                 Apakah Anda yakin ingin mengakhiri sesi? <br>
-                Anda perlu login kembali untuk melihat progres <strong>Aria Wijaya</strong>.
+                Anda perlu login kembali untuk melihat progres 
+                <strong>
+                    {{-- Ambil nama anak dari session --}}
+                    @php
+                        $childId = session('active_child_id');
+                        $child = null;
+                        if ($childId && Auth::check()) {
+                            $child = App\Models\Children::where('user_id', Auth::id())
+                                ->where('id', $childId)
+                                ->first();
+                        }
+                    @endphp
+                    {{ $child->nama_anak ?? 'anak Anda' }}
+                </strong>.
             </p>
 
-            <!-- PERBAIKAN: Form Logout menggunakan route yang benar -->
+            <!-- Form Logout -->
             <form action="{{ route('logout') }}" method="POST">
                 @csrf
 
@@ -75,7 +88,7 @@
                         Ya, Keluar Sekarang
                     </button>
 
-                    <!-- Tombol Batal / Kembali - PERBAIKAN: gunakan named route -->
+                    <!-- Tombol Batal / Kembali -->
                     <a href="{{ url()->previous() }}" class="w-full py-3 px-4 bg-white border border-gray-300 text-gray-600 font-bold rounded-xl hover:bg-gray-50 hover:text-gray-800 transition-all text-center">
                         Batal, Kembali ke Beranda
                     </a>
