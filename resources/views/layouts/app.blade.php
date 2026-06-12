@@ -310,7 +310,7 @@
                         <i class="fa-solid fa-house"></i>
                         <span>Dashboard Utama</span>
                     </a>
-                    <a href="{{ route('children.index') }}" class="nav-item {{ request()->routeIs('children.*') ? 'active' : '' }}">
+                    <a href="{{ route('setting.index') }}" class="nav-item {{ request()->routeIs('children.*') ? 'active' : '' }}">
                         <i class="fa-solid fa-baby"></i>
                         <span>Personal Tumbuh Anak</span>
                     </a>
@@ -318,11 +318,11 @@
                         <i class="fa-solid fa-chart-line"></i>
                         <span>Rencana Harian</span>
                     </a>
-                    <a href="#" class="nav-item">
+                    <a href="{{ route('parent-journals.index') }}" class="nav-item">
                         <i class="fa-solid fa-book-open"></i>
                         <span>Jurnal Harian Ortu</span>
                     </a>
-                    <a href="#" class="nav-item">
+                    <a href="{{ route('parent-journals.report') }}" class="nav-item">
                         <i class="fa-regular fa-calendar-check"></i>
                         <span>Pantau Progres</span>
                     </a>

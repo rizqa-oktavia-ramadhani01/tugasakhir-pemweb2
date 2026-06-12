@@ -11,6 +11,7 @@ use App\Http\Controllers\ChildController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LogOutController;
+use App\Http\Controllers\ParentJournalController;
 
 // Admin Controllers
 use App\Http\Controllers\Admin\ActivityController as AdminActivityController;
@@ -45,6 +46,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/aktivitas', [DashboardController::class, 'activities'])->name('activities.index');
     Route::post('/toggle-activity', [DashboardController::class, 'toggleActivity'])->name('toggle-activity');
+
+    Route::resource('parent-journals', ParentJournalController::class);
+    Route::get('parent-journals-report', [ParentJournalController::class, 'report'])->name('parent-journals.report');
 
     Route::resource('children', ChildController::class);
     Route::resource('activities', ActivityController::class);
