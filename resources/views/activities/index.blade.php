@@ -22,7 +22,7 @@
     </div>
 
     <div class="row g-4">
-        @forelse(($activities ?? []) as $activity)
+        @forelse($activities as $activity)
         <div class="col-md-6 col-lg-4">
             <div class="card border-0 shadow-sm rounded-4 h-100">
                 <div class="card-body p-4">
@@ -54,23 +54,23 @@
                     </div>
                     @endif
 
-                    <button class="toggle-activity-btn w-100 py-2 rounded-3 fw-semibold border-0 transition
-                        @if(isset($todayLogs[$activity->id]) && $todayLogs[$activity->id]->selesai)
-                            bg-success text-white
-                        @else
-                            bg-light text-secondary
-                        @endif"
-                        data-activity-id="{{ $activity->id }}"
-                        data-selesai="{{ isset($todayLogs[$activity->id]) && $todayLogs[$activity->id]->selesai ? '1' : '0' }}">
-                        <i class="bi bi-check-circle me-2"></i>
-                        <span class="toggle-text">
-                            @if(isset($todayLogs[$activity->id]) && $todayLogs[$activity->id]->selesai)
-                                ✅ Selesai Dilatih
-                            @else
-                                ☐ Centang Selesai
-                            @endif
-                        </span>
-                    </button>
+                    @php
+                        $isChecked = isset($todayLogs[$activity->id]) && $todayLogs[$activity->id]->selesai == 1;
+                    @endphp
+
+                    <form action="{{ route('toggle-activity') }}" method="POST" class="d-inline w-100">
+                        @csrf
+                        <input type="hidden" name="activity_id" value="{{ $activity->id }}">
+                        <input type="hidden" name="child_id" value="{{ session('active_child_id') }}">
+                        <input type="hidden" name="selesai" value="{{ $isChecked ? 0 : 1 }}">
+                        <button type="submit" class="toggle-activity-btn w-100 py-2 rounded-3 fw-semibold border-0 transition
+                            {{ $isChecked ? 'bg-success text-white' : 'bg-light text-secondary' }}">
+                            <i class="bi bi-check-circle me-2"></i>
+                            <span class="toggle-text">
+                                {{ $isChecked ? '✅ Selesai Dilatih' : '☐ Centang Selesai' }}
+                            </span>
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -87,41 +87,18 @@
 <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
 <script>
 $(document).ready(function() {
-    $('.toggle-activity-btn').click(function() {
-        let $btn = $(this);
-        let activityId = $btn.data('activity-id');
-        let currentStatus = $btn.data('selesai') == 1;
-        let childId = {{ $child->id ?? 0 }};
-
-        if (!childId) {
-            alert('Silakan tambahkan data anak terlebih dahulu');
-            return;
-        }
-
+    $('.toggle-activity-btn').click(function(e) {
+        e.preventDefault();
+        let $form = $(this).closest('form');
         $.ajax({
-            url: '{{ route("toggle-activity") }}',
+            url: $form.attr('action'),
             method: 'POST',
-            data: {
-                _token: '{{ csrf_token() }}',
-                activity_id: activityId,
-                child_id: childId,
-                selesai: currentStatus ? 0 : 1
-            },
+            data: $form.serialize(),
             success: function(response) {
-                if (response.selesai == 1) {
-                    $btn.removeClass('bg-light text-secondary').addClass('bg-success text-white');
-                    $btn.find('.toggle-text').html('✅ Selesai Dilatih');
-                    $btn.data('selesai', 1);
-                } else {
-                    $btn.removeClass('bg-success text-white').addClass('bg-light text-secondary');
-                    $btn.find('.toggle-text').html('☐ Centang Selesai');
-                    $btn.data('selesai', 0);
-                }
-                setTimeout(() => location.reload(), 500);
+                location.reload();
             },
-            error: function(xhr) {
-                let errorMsg = xhr.responseJSON?.message || 'Terjadi kesalahan';
-                alert('Error: ' + errorMsg);
+            error: function() {
+                alert('Terjadi kesalahan');
             }
         });
     });
