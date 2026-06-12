@@ -318,7 +318,7 @@
                         <i class="fa-solid fa-chart-line"></i>
                         <span>Rencana Harian</span>
                     </a>
-                    <a href="{{ route('parent-journals.index') }}" class="nav-item">
+                    <a href="{{ route('parent-journals.index') }}"  class="nav-item {{ request()->routeIs('parent-journals.*') ? 'active' : '' }}">
                         <i class="fa-solid fa-book-open"></i>
                         <span>Jurnal Harian Ortu</span>
                     </a>
