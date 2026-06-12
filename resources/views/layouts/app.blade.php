@@ -322,7 +322,7 @@
                         <i class="fa-solid fa-book-open"></i>
                         <span>Jurnal Harian Ortu</span>
                     </a>
-                    <a href="{{ route('parent-journals.report') }}" class="nav-item">
+                    <a href="{{ route('progress.index') }}" class="nav-item {{ request()->routeIs('progress.*') ? 'active' : '' }}"class="nav-item">
                         <i class="fa-regular fa-calendar-check"></i>
                         <span>Pantau Progres</span>
                     </a>

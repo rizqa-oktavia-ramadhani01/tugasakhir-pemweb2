@@ -12,6 +12,7 @@ use App\Http\Controllers\SettingController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LogOutController;
 use App\Http\Controllers\ParentJournalController;
+use App\Http\Controllers\ProgressController;
 
 // Admin Controllers
 use App\Http\Controllers\Admin\ActivityController as AdminActivityController;
@@ -49,6 +50,8 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('parent-journals', ParentJournalController::class);
     Route::get('parent-journals-report', [ParentJournalController::class, 'report'])->name('parent-journals.report');
+
+    Route::get('/progress', [ProgressController::class, 'index'])->name('progress.index');
 
     Route::resource('children', ChildController::class);
     Route::resource('activities', ActivityController::class);
