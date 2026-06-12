@@ -43,6 +43,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/switch-child/{id}', [DashboardController::class, 'switchChild'])->name('switch.child');
 
+    Route::get('/aktivitas', [DashboardController::class, 'activities'])->name('activities.index');
+    Route::post('/toggle-activity', [DashboardController::class, 'toggleActivity'])->name('toggle-activity');
+
     Route::resource('children', ChildController::class);
     Route::resource('activities', ActivityController::class);
     Route::resource('learning-contents', LearningContentController::class);
@@ -88,7 +91,6 @@ Route::prefix('admin')->middleware('auth')->group(function () {
                 'totalContents'
             )
         );
-
     })->name('admin.dashboard');
 
     // Activities CRUD
