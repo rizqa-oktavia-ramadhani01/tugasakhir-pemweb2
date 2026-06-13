@@ -53,12 +53,13 @@ Route::middleware('auth')->group(function () {
 
     // Progress
     Route::get('/progress', [ProgressController::class, 'index'])->name('progress.index');
+    Route::post('/toggle-milestone', [ProgressController::class, 'toggleMilestone'])->name('toggle-milestone');
 
     // Resources
     Route::resource('children', ChildController::class);
     Route::get('/activities', [DashboardController::class, 'activities'])->name('activities.index');
     // Route::resource('activities', ActivityController::class);
-    
+
     // Area Anak Mandiri (Bermain)
     Route::get('/area-anak/latih-pelafalan', [LearningContentController::class, 'pelafalan'])
         ->name('learning-contents.pelafalan');
