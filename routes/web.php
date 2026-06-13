@@ -59,8 +59,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/activities', [DashboardController::class, 'activities'])->name('activities.index');
     Route::resource('activities', ActivityController::class);
     
+    // Area Anak Mandiri (Bermain)
     Route::get('/area-anak/latih-pelafalan', [LearningContentController::class, 'pelafalan'])
         ->name('learning-contents.pelafalan');
+
+    // ROUTE BARU: Tantangan Bahasa
+    Route::get('/area-anak/tantangan-bahasa', [LearningContentController::class, 'tantangan'])
+        ->name('learning-contents.tantangan');
 
     Route::resource('learning-contents', LearningContentController::class);
 

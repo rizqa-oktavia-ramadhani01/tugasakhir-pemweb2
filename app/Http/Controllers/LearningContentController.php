@@ -149,8 +149,18 @@ class LearningContentController extends Controller
     {
         $contents = LearningContent::all(); 
         
-        $activeChild = auth()->user() && auth()->user()->children ? auth()->user()->children->first() : null;
+        $child = auth()->user() && auth()->user()->children ? auth()->user()->children->first() : null;
 
-        return view('learning_contents.pelafalan', compact('contents', 'activeChild'));
+        return view('learning_contents.pelafalan', compact('contents', 'child'));
+    }
+    
+    public function tantangan()
+    {
+
+        $contents = LearningContent::all(); 
+        
+        $child = auth()->user() && auth()->user()->children ? auth()->user()->children->first() : null;
+
+        return view('learning_contents.tantangan', compact('contents', 'child'));
     }
 }
