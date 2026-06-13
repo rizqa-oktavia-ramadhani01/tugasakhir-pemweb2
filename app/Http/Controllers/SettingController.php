@@ -7,12 +7,15 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rules\Password;
+use App\Models\Children;
 
 class SettingController extends Controller
 {
     public function index()
     {
-        return view('setting.index');
+        $children = Children::where('user_id', Auth::id())->get();
+
+        return view('setting.index', compact('children'));
     }
 
     public function updatePassword(Request $request)
@@ -38,13 +41,13 @@ class SettingController extends Controller
         try {
             // Contoh: Hapus semua progress anak yang login
             // DB::table('child_progress')->where('user_id', Auth::id())->delete();
-            
+
             // Contoh: Hapus data activities
             // DB::table('activities')->where('user_id', Auth::id())->delete();
-            
+
             // Contoh: Reset data learning contents
             // DB::table('learning_contents')->where('user_id', Auth::id())->delete();
-            
+
             return response()->json(['success' => true, 'message' => 'Data studi berhasil direset']);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => 'Gagal mereset data: ' . $e->getMessage()], 500);
