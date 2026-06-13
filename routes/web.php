@@ -57,7 +57,7 @@ Route::middleware('auth')->group(function () {
     // Resources
     Route::resource('children', ChildController::class);
     Route::get('/activities', [DashboardController::class, 'activities'])->name('activities.index');
-    Route::resource('activities', ActivityController::class);
+    // Route::resource('activities', ActivityController::class);
     
     Route::get('/area-anak/latih-pelafalan', [LearningContentController::class, 'pelafalan'])
         ->name('learning-contents.pelafalan');
