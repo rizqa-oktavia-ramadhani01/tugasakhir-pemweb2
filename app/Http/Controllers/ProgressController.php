@@ -188,7 +188,19 @@ class ProgressController extends Controller
         $child = Children::find($childId);
         $usiaTahun = $child->usia_anak ?? 2;
 
-        $milestones = Milestone::where('kategori_usia', 'LIKE', $usiaTahun . '%')->get();
+        if ($usiaTahun >= 1 && $usiaTahun < 2) {
+            $kategoriUsia = '1-2 Tahun';
+        } elseif ($usiaTahun >= 2 && $usiaTahun < 3) {
+            $kategoriUsia = '2-3 Tahun';
+        } elseif ($usiaTahun >= 3 && $usiaTahun < 4) {
+            $kategoriUsia = '3-4 Tahun';
+        } elseif ($usiaTahun >= 4 && $usiaTahun < 5) {
+            $kategoriUsia = '4-5 Tahun';
+        } else {
+            $kategoriUsia = '5+ Tahun';
+        }
+
+        $milestones = Milestone::where('kategori_usia', $kategoriUsia)->get();
 
         if ($milestones->isEmpty()) {
             $milestones = Milestone::where('kategori_usia', '1-3 Tahun')->get();
