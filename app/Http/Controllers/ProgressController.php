@@ -125,7 +125,7 @@ class ProgressController extends Controller
     private function getWeeklyActivityData($childId)
     {
         $data = [];
-        $totalActivities = Activity::count();
+        $totalActivities = 3;
         
         for ($i = 6; $i >= 0; $i--) {
             $date = now()->startOfWeek()->addDays($i);
