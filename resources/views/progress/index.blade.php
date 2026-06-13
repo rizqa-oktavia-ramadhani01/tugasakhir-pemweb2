@@ -60,7 +60,7 @@
                     <div class="d-flex justify-content-between align-items-end" style="height: 200px;">
                         @foreach($weeklyData as $day)
                         <div class="text-center" style="flex: 1;">
-                            <div class="bg-success rounded-3 mx-auto" style="width: 30px; height: {{ $day['completed'] > 0 ? ($day['completed'] / max($day['total'], 1)) * 150 : 5 }}px; background-color: {{ $day['isToday'] ? '#4F46E5' : '#00b894' }};"></div>
+                            <div class="bg-success rounded-3 mx-auto" style="width: 30px; height: {{ ($day['completed'] / max($day['total'], 1)) * 60 }}px; min-height: 5px; background-color: {{ $day['isToday'] ? '#4F46E5' : '#00b894' }};"></div>
                             <p class="mt-2 small fw-bold">{{ $day['completed'] }}/{{ $day['total'] }}</p>
                             <p class="small text-muted">{{ $day['hari'] }}</p>
                             @if($day['isToday'])
