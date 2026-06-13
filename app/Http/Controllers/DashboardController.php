@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Children;
 use App\Models\Activity;
 use App\Models\ActivityLog;
+use App\Models\DailyTodo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -73,7 +74,34 @@ class DashboardController extends Controller
         $childId = session('active_child_id');
         $child = Children::where('user_id', Auth::id())->where('id', $childId)->first();
 
-        $activities = Activity::inRandomOrder()->limit(3)->get();
+        // Cek apakah sudah ada daily_todo untuk hari ini
+        $dailyTodos = DailyTodo::where('child_id', $child->id)
+            ->where('tanggal', today())
+            ->with('activity')
+            ->get();
+
+        // Jika belum ada, buat 3 aktivitas acak untuk hari ini
+        if ($dailyTodos->isEmpty()) {
+            $randomActivities = Activity::inRandomOrder()->limit(3)->get();
+
+            foreach ($randomActivities as $activity) {
+                DailyTodo::create([
+                    'child_id' => $child->id,
+                    'tanggal' => today(),
+                    'activity_id' => $activity->id,
+                    'status' => 'pending'
+                ]);
+            }
+
+            // Ambil ulang data yang baru dibuat
+            $dailyTodos = DailyTodo::where('child_id', $child->id)
+                ->where('tanggal', today())
+                ->with('activity')
+                ->get();
+        }
+
+        // Ambil data aktivitas dari daily_todos
+        $activities = $dailyTodos->pluck('activity');
         $totalActivities = $activities->count();
 
         $todayLogs = ActivityLog::where('child_id', $child->id)

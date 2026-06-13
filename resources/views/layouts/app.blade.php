@@ -17,7 +17,6 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap"
         rel="stylesheet">
-
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
@@ -210,16 +209,27 @@
             flex-shrink: 0;
         }
 
+        .greeting {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+        }
+
         .greeting h1 {
             font-size: 1.25rem;
             font-weight: 700;
             color: #0F172A;
+            margin: 0;
+            line-height: 1.3;
         }
 
         .greeting p {
             font-size: 0.75rem;
             color: #64748B;
             font-weight: 500;
+            margin: 0;
+            line-height: 1.3;
         }
 
         .header-actions {
@@ -323,20 +333,30 @@
                         <i class="fa-solid fa-chart-line"></i>
                         <span>Rencana Harian</span>
                     </a>
-                    <a href="{{ route('parent-journals.index') }}"
+                    <<<<<<< HEAD <a href="{{ route('parent-journals.index') }}"
                         class="nav-item {{ request()->routeIs('parent-journals.*') ? 'active' : '' }}">
                         <i class="fa-solid fa-book-open"></i>
                         <span>Jurnal Harian Ortu</span>
-                    </a>
-                    <a href="{{ route('progress.index') }}"
-                        class="nav-item {{ request()->routeIs('progress.*') ? 'active' : '' }}" class="nav-item">
-                        <i class="fa-regular fa-calendar-check"></i>
-                        <span>Pantau Progres</span>
-                    </a>
-                    <a href="#" class="nav-item">
-                        <i class="fa-solid fa-newspaper"></i>
-                        <span>Pusat Edukasi</span>
-                    </a>
+                        </a>
+                        <a href="{{ route('progress.index') }}"
+                            class="nav-item {{ request()->routeIs('progress.*') ? 'active' : '' }}" class="nav-item">
+                            =======
+                            <a href="{{ route('parent-journals.index') }}"
+                                class="nav-item {{ request()->routeIs('parent-journals.*') ? 'active' : '' }}">
+                                <i class="fa-solid fa-book-open"></i>
+                                <span>Jurnal Harian Ortu</span>
+                            </a>
+                            <a href="{{ route('progress.index') }}"
+                                class="nav-item {{ request()->routeIs('progress.*') ? 'active' : '' }}"
+                                class="nav-item">
+                                >>>>>>> 063a1105643b2b313706428c17358bf66ad61aaa
+                                <i class="fa-regular fa-calendar-check"></i>
+                                <span>Pantau Progres</span>
+                            </a>
+                            <a href="#" class="nav-item">
+                                <i class="fa-solid fa-newspaper"></i>
+                                <span>Pusat Edukasi</span>
+                            </a>
                 </div>
 
                 <!-- ===== FITUR ANAK ===== -->
@@ -406,7 +426,12 @@
         // Set dynamic date
         const dateElement = document.querySelector('.greeting p');
         if (dateElement) {
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const options = {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            };
             const today = new Date().toLocaleDateString('id-ID', options);
             dateElement.textContent = today;
         }

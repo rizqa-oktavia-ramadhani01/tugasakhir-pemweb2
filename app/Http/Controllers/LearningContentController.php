@@ -143,4 +143,14 @@ class LearningContentController extends Controller
 
         return redirect()->route('learning-contents.index');
     }
+
+    
+    public function pelafalan()
+    {
+        $contents = LearningContent::all(); 
+        
+        $activeChild = auth()->user() && auth()->user()->children ? auth()->user()->children->first() : null;
+
+        return view('learning_contents.pelafalan', compact('contents', 'activeChild'));
+    }
 }
