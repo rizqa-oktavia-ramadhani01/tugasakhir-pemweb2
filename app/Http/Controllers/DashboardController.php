@@ -73,7 +73,7 @@ class DashboardController extends Controller
         $childId = session('active_child_id');
         $child = Children::where('user_id', Auth::id())->where('id', $childId)->first();
 
-        $activities = Activity::all();
+        $activities = Activity::inRandomOrder()->limit(3)->get();
         $totalActivities = $activities->count();
 
         $todayLogs = ActivityLog::where('child_id', $child->id)

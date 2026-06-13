@@ -48,7 +48,7 @@ class ParentJournalController extends Controller
         $todayJournal = ParentJournal::where('child_id', $child->id)
             ->where('tanggal', today())
             ->first();
-        
+
         if ($todayJournal) {
             return redirect()->route('parent-journals.edit', $todayJournal->id)
                 ->with('info', 'Jurnal hari ini sudah ada. Silakan edit.');
