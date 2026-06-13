@@ -333,30 +333,21 @@
                         <i class="fa-solid fa-chart-line"></i>
                         <span>Rencana Harian</span>
                     </a>
-                    <<<<<<< HEAD <a href="{{ route('parent-journals.index') }}"
+                    <a href="{{ route('parent-journals.index') }}"
                         class="nav-item {{ request()->routeIs('parent-journals.*') ? 'active' : '' }}">
                         <i class="fa-solid fa-book-open"></i>
                         <span>Jurnal Harian Ortu</span>
-                        </a>
-                        <a href="{{ route('progress.index') }}"
-                            class="nav-item {{ request()->routeIs('progress.*') ? 'active' : '' }}" class="nav-item">
-                            =======
-                            <a href="{{ route('parent-journals.index') }}"
-                                class="nav-item {{ request()->routeIs('parent-journals.*') ? 'active' : '' }}">
-                                <i class="fa-solid fa-book-open"></i>
-                                <span>Jurnal Harian Ortu</span>
-                            </a>
-                            <a href="{{ route('progress.index') }}"
-                                class="nav-item {{ request()->routeIs('progress.*') ? 'active' : '' }}"
-                                class="nav-item">
-                                >>>>>>> 063a1105643b2b313706428c17358bf66ad61aaa
-                                <i class="fa-regular fa-calendar-check"></i>
-                                <span>Pantau Progres</span>
-                            </a>
-                            <a href="#" class="nav-item">
-                                <i class="fa-solid fa-newspaper"></i>
-                                <span>Pusat Edukasi</span>
-                            </a>
+                    </a>
+
+                    <a href="{{ route('progress.index') }}"
+                        class="nav-item {{ request()->routeIs('progress.*') ? 'active' : '' }}">
+                        <i class="fa-regular fa-calendar-check"></i>
+                        <span>Pantau Progres</span>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <i class="fa-solid fa-newspaper"></i>
+                        <span>Pusat Edukasi</span>
+                    </a>
                 </div>
 
                 <!-- ===== FITUR ANAK ===== -->

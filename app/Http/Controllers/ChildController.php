@@ -53,7 +53,9 @@ class ChildController extends Controller
             'riwayat_perkembangan_bahasa' => $request->riwayat_perkembangan_bahasa,
         ]);
 
-        return redirect()->route('children.index');
+        return redirect()
+            ->route('setting.index')
+            ->with('success', 'Data anak berhasil ditambahkan.');
     }
 
     /**

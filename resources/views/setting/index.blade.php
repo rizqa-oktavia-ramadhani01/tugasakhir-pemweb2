@@ -1,318 +1,178 @@
-<!DOCTYPE html>
-<html lang="id">
+@extends('layouts.app')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Anak</title>
-    <style>
-        /* 1. Reset Dasar */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
+@section('content')
 
-        body {
-            background-color: #f0f2f5;
-            color: #333;
-            padding: 20px;
-        }
+    <div class="container-fluid">
 
-        /* 2. Container Full Width */
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+        <div class="card border-0 shadow-sm mb-4 overflow-hidden">
 
-        /* Header */
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
+            <div class="card-body p-5 text-white" style="background:linear-gradient(135deg,#4F46E5,#6366F1);">
 
-        h1 {
-            font-size: 24px;
-            color: #2c3e50;
-        }
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
 
-        .btn-add {
-            background-color: #27ae60;
-            color: white;
-            text-decoration: none;
-            padding: 10px 24px;
-            border-radius: 6px;
-            font-weight: 600;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            transition: background 0.2s;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
+                    <div>
 
-        .btn-add:hover {
-            background-color: #219150;
-        }
+                        <h1 class="fw-bold mb-2 text-white">
+                            Data Anak
+                        </h1>
 
-        /* 3. CSS GRID LAYOUT */
-        .card-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-        }
+                        <p class="mb-0 opacity-75">
+                            Kelola data anak yang terhubung dengan akun Anda.
+                        </p>
 
-        /* 4. Desain Kartu (Card) */
-        .child-card {
-            background: white;
-            border-radius: 12px;
-            padding: 24px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            position: relative;
-            transition: transform 0.2s, box-shadow 0.2s;
-            border: 1px solid transparent;
-        }
-
-        .child-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-            border-color: #e0e0e0;
-        }
-
-        /* --- PERBAIKAN DI SINI --- */
-        .card-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 15px;
-
-            /* Tambah padding kanan yang besar (selebar tombol) */
-            padding-right: 140px;
-
-            width: 100%;
-        }
-
-        .card-info {
-            flex: 1;
-            /* Agar area teks mengambil sisa ruang yang tersedia */
-            min-width: 0;
-            /* Diperlukan agar ellipsis (titik tiga) bisa bekerja */
-        }
-
-        .card-info h3 {
-            font-size: 18px;
-            color: #333;
-            margin-bottom: 2px;
-
-            /* Agar nama panjang dipotong dan diberi titik tiga "..." */
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .card-info p {
-            font-size: 13px;
-            color: #777;
-        }
-
-        /* ----------------------- */
-
-        .divider {
-            height: 1px;
-            background-color: #eee;
-            margin: 15px 0;
-        }
-
-        .btn-dashboard {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            padding: 10px;
-            background-color: #f8f9fa;
-            color: #333;
-            text-decoration: none;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 14px;
-            transition: all 0.2s;
-            gap: 8px;
-        }
-
-        .btn-dashboard:hover {
-            background-color: #007bff;
-            color: white;
-        }
-
-        .btn-dashboard svg {
-            width: 16px;
-            height: 16px;
-            fill: currentColor;
-            transition: transform 0.2s;
-        }
-
-        .btn-dashboard:hover svg {
-            transform: translateX(4px);
-        }
-
-        /* --- TOMBOL AKSI (POJOK KANAN ATAS) --- */
-        .card-actions {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            display: flex;
-            gap: 8px;
-            z-index: 10;
-        }
-
-        .icon-btn {
-            background: white;
-            border: 1px solid #eee;
-            border-radius: 50%;
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            color: #555;
-            transition: all 0.2s;
-            text-decoration: none;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-
-        .icon-btn svg {
-            width: 16px;
-            height: 16px;
-            fill: currentColor;
-        }
-
-        .icon-btn:hover {
-            transform: scale(1.1);
-        }
-
-        .icon-btn.view:hover {
-            background-color: #e3f2fd;
-            color: #1976d2;
-            border-color: #bbdefb;
-        }
-
-        .icon-btn.edit:hover {
-            background-color: #fff3e0;
-            color: #f57c00;
-            border-color: #ffe0b2;
-        }
-
-        .icon-btn.delete:hover {
-            background-color: #ffebee;
-            color: #d32f2f;
-            border-color: #ffcdd2;
-        }
-
-        .form-delete {
-            display: inline;
-            padding: 0;
-            margin: 0;
-            background: none;
-        }
-
-        .empty-state {
-            grid-column: 1 / -1;
-            text-align: center;
-            padding: 50px;
-            color: #888;
-            background: white;
-            border-radius: 12px;
-        }
-    </style>
-</head>
-
-<body>
-
-    <div class="container">
-
-        <header>
-            <h1>Data Anak</h1>
-            <a href="{{ route('children.create') }}" class="btn-add">
-                <svg style="width:20px;height:20px;fill:white;" viewBox="0 0 24 24">
-                    <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
-                </svg>
-                Tambah Anak
-            </a>
-        </header>
-
-        <div class="card-grid">
-
-            @forelse($children as $child)
-
-                <div class="child-card">
-
-                    <!-- Area Tombol Aksi -->
-                    <div class="card-actions">
-                        <a href="{{ route('children.show', $child->id) }}" class="icon-btn view" title="Lihat Detail">
-                            <svg viewBox="0 0 24 24">
-                                <path
-                                    d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
-                            </svg>
-                        </a>
-
-                        <a href="{{ route('children.edit', $child->id) }}" class="icon-btn edit" title="Edit">
-                            <svg viewBox="0 0 24 24">
-                                <path
-                                    d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
-                            </svg>
-                        </a>
-
-                        <form action="{{ route('children.destroy', $child->id) }}" method="POST" class="form-delete"
-                            onsubmit="return confirm('Yakin hapus data ini?');">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="icon-btn delete" title="Hapus">
-                                <svg viewBox="0 0 24 24">
-                                    <path
-                                        d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
-                                </svg>
-                            </button>
-                        </form>
                     </div>
 
-                    <!-- Info Kartu -->
-                    <div class="card-header">
-                        <div class="avatar">
-                            {{ substr($child->nama_anak, 0, 1) }}
-                        </div>
-                        <div class="card-info">
-                            <h3 title="{{ $child->nama_anak }}">{{ $child->nama_anak }}</h3>
-                            <p>{{ $child->usia_anak }} Tahun &bull; {{ $child->jenis_kelamin }}</p>
-                        </div>
-                    </div>
+                    <a href="{{ route('children.create') }}" class="btn btn-light">
 
-                    <div class="divider"></div>
+                        <i class="bi bi-plus-circle me-2"></i>
 
-                    <a href="{{ route('switch.child', $child->id) }}" class="btn-dashboard">
-                        Buka Dashboard
-                        <svg viewBox="0 0 24 24">
-                            <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
-                        </svg>
+                        Tambah Anak
+
                     </a>
 
                 </div>
 
-            @empty
-                <div class="empty-state">
-                    <p>Belum ada data anak.</p>
+            </div>
+
+        </div>
+
+        <div class="row g-4">
+
+            @forelse($children as $child)
+
+                <div class="col-md-6 col-xl-4">
+                    <div class="card border-0 shadow-sm h-100">
+
+                        <div class="card-body d-flex flex-column">
+
+                            <div class="d-flex align-items-center mb-3">
+
+                                <div class="rounded-circle text-white fw-bold d-flex align-items-center justify-content-center"
+                                    style="width:60px;height:60px;background:#4F46E5;">
+
+                                    {{ strtoupper(substr($child->nama_anak, 0, 1)) }}
+
+                                </div>
+
+                                <div class="ms-3">
+
+                                    <h5 class="fw-bold mb-1">
+                                        {{ $child->nama_anak }}
+                                    </h5>
+
+                                    <small class="text-muted d-block">
+                                        <i class="bi bi-calendar-event me-1"></i>
+                                        {{ $child->usia_anak }} Tahun
+                                    </small>
+
+                                    <small class="text-muted">
+                                        <i class="bi bi-person me-1"></i>
+                                        {{ $child->jenis_kelamin }}
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+                            <hr>
+
+                            <div class="d-grid mb-3">
+
+                                <a href="{{ route('switch.child', $child->id) }}" class="btn text-white"
+                                    style="background:#4F46E5;">
+
+                                    <i class="fa-solid fa-house"></i>
+
+                                    Buka Dashboard
+
+                                </a>
+
+                            </div>
+
+                            <div class="row g-2 mt-auto">
+
+                                <div class="col-4">
+
+                                    <a href="{{ route('children.show', $child->id) }}" class="btn btn-light border w-100">
+
+                                        <i class="bi bi-eye"></i>
+
+                                    </a>
+
+                                </div>
+
+                                <div class="col-4">
+
+                                    <a href="{{ route('children.edit', $child->id) }}" class="btn btn-light border w-100">
+
+                                        <i class="bi bi-pencil-square"></i>
+
+                                    </a>
+
+                                </div>
+
+                                <div class="col-4">
+
+                                    <form action="{{ route('children.destroy', $child->id) }}" method="POST">
+
+                                        @csrf
+                                        @method('DELETE')
+
+                                        <button type="submit" class="btn btn-light border text-danger w-100"
+                                            onclick="return confirm('Yakin hapus data anak ini?')">
+
+                                            <i class="bi bi-trash"></i>
+
+                                        </button>
+
+                                    </form>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
                 </div>
+
+            @empty
+
+                <div class="col-12">
+
+                    <div class="card border-0 shadow-sm">
+
+                        <div class="card-body text-center py-5">
+
+                            <i class="bi bi-person-plus" style="font-size:60px;color:#4F46E5;"></i>
+
+                            <h4 class="mt-3">
+                                Belum Ada Data Anak
+                            </h4>
+
+                            <p class="text-muted">
+                                Tambahkan data anak terlebih dahulu.
+                            </p>
+
+                            <a href="{{ route('children.create') }}" class="btn text-white" style="background:#4F46E5;">
+
+                                <i class="bi bi-plus-circle me-2"></i>
+
+                                Tambah Anak
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
             @endforelse
 
         </div>
+
     </div>
 
-</body>
-
-</html>
+@endsection
