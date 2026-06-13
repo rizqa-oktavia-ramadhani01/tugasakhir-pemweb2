@@ -13,11 +13,18 @@ class ChildController extends Controller
      */
     public function index()
     {
-        $children = Children::where('user_id', Auth::id())->get();
+        $childId = session('active_child_id');
 
-        return view('children.index', compact('children'));
+        $child = Children::where('user_id', Auth::id())
+            ->where('id', $childId)
+            ->first();
+
+        if (!$child) {
+            $child = Children::where('user_id', Auth::id())->first();
+        }
+
+        return view('children.index', compact('child'));
     }
-
     /**
      * Show the form for creating a new resource.
      */

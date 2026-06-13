@@ -46,7 +46,7 @@ class AuthController extends Controller
             }
 
             // selain admin (parent), redirect ke children index
-            return redirect()->route('children.index');
+            return redirect()->route('setting.index');
         }
 
         return back()->with('error', 'Login gagal');
