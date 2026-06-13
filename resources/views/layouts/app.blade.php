@@ -118,7 +118,9 @@
         <a href="{{ route('learning-contents.pelafalan') }}" class="menu-link {{ request()->routeIs('learning-contents.*') ? 'menu-active' : '' }}">
             🔊 Latih Pelafalan
         </a>
-        <a href="#" class="menu-link">🏆 Tantangan Bahasa</a>
+        <a href="{{ route('learning-contents.tantangan') }}" class="menu-link {{ request()->routeIs('learning-contents.*') ? 'menu-active' : '' }}">
+            🏆 Tantangan Bahasa
+        </a>
 
         <div class="mt-auto pt-3 border-top">
             <div class="p-3 bg-light rounded-4 mb-3">
