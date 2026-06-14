@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
-
     public function index()
     {
         $childId = session('active_child_id');
@@ -41,22 +40,22 @@ class DashboardController extends Controller
         }
 
         // ========== AKTIVITAS HARIAN ==========
-        // Total aktivitas hari ini (dari daily_todos)
+        // Total aktivitas hari ini dari daily_todos
         $totalTasks = DailyTodo::where('child_id', $child->id)
             ->where('tanggal', today())
             ->count();
-
-        // Aktivitas yang sudah selesai (dari activity_logs)
+        
+        // Aktivitas yang sudah selesai dari activity_logs
         $completedTasks = ActivityLog::where('child_id', $child->id)
             ->whereDate('tanggal', today())
             ->where('selesai', true)
             ->count();
-
+        
         $taskProgressPercent = $totalTasks > 0 ? round(($completedTasks / $totalTasks) * 100) : 0;
 
         // ========== PROGRES MILESTONE ==========
         $usiaTahun = $child->usia_anak ?? 2;
-
+        
         if ($usiaTahun >= 1 && $usiaTahun < 2) {
             $kategoriUsia = '1-2 Tahun';
         } elseif ($usiaTahun >= 2 && $usiaTahun < 3) {
@@ -68,19 +67,19 @@ class DashboardController extends Controller
         } else {
             $kategoriUsia = '5+ Tahun';
         }
-
+        
         $milestones = Milestone::where('kategori_usia', $kategoriUsia)->get();
-
+        
         if ($milestones->isEmpty()) {
             $milestones = Milestone::where('kategori_usia', '5+ Tahun')->get();
         }
-
+        
         $totalMilestones = $milestones->count();
         $completedMilestones = ChildMilestone::where('child_id', $child->id)
             ->whereIn('milestone_id', $milestones->pluck('id'))
             ->where('status', 'tercapai')
             ->count();
-
+        
         $milestoneProgressPercent = $totalMilestones > 0 ? round(($completedMilestones / $totalMilestones) * 100) : 0;
 
         return view('dashboard.dashboard', compact(
@@ -108,13 +107,11 @@ class DashboardController extends Controller
         $childId = session('active_child_id');
         $child = Children::where('user_id', Auth::id())->where('id', $childId)->first();
 
-        // Cek apakah sudah ada daily_todo untuk hari ini
         $dailyTodos = DailyTodo::where('child_id', $child->id)
             ->where('tanggal', today())
             ->with('activity')
             ->get();
 
-        // Jika belum ada, buat 3 aktivitas acak untuk hari ini
         if ($dailyTodos->isEmpty()) {
             $randomActivities = Activity::inRandomOrder()->limit(3)->get();
 
@@ -127,14 +124,12 @@ class DashboardController extends Controller
                 ]);
             }
 
-            // Ambil ulang data yang baru dibuat
             $dailyTodos = DailyTodo::where('child_id', $child->id)
                 ->where('tanggal', today())
                 ->with('activity')
                 ->get();
         }
 
-        // Ambil data aktivitas dari daily_todos
         $activities = $dailyTodos->pluck('activity');
         $totalActivities = $activities->count();
 

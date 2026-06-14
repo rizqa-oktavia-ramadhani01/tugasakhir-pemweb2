@@ -356,11 +356,13 @@
                     <div class="category-title">
                         <i class="fa-regular fa-face-smile mr-1"></i> Fitur Anak
                     </div>
-                    <a href="{{ route('learning-contents.pelafalan') }}" class="nav-item">
+                    <a href="{{ route('learning-contents.pelafalan') }}"
+                        class="nav-item {{ request()->routeIs('learning-contents.pelafalan') ? 'active' : '' }}">
                         <i class="fa-solid fa-microphone-alt"></i>
                         <span>Latih Pelafalan</span>
                     </a>
-                    <a href="{{ route('learning-contents.tantangan') }}" class="nav-item">
+                    <a href="{{ route('learning-contents.tantangan') }}"
+                        class="nav-item {{ request()->routeIs('learning-contents.tantangan') ? 'active' : '' }}">
                         <i class="fa-solid fa-comments"></i>
                         <span>Tantangan Bahasa</span>
                     </a>

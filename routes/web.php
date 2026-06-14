@@ -69,8 +69,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/area-anak/tantangan-bahasa', [LearningContentController::class, 'tantangan'])
         ->name('learning-contents.tantangan');
 
-    Route::resource('learning-contents', LearningContentController::class);
-
     // Profile
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
     Route::put('/profile/name', [ProfileController::class, 'updateName'])->name('profile.update-name');
@@ -80,7 +78,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
     Route::put('/setting/password', [SettingController::class, 'updatePassword'])->name('setting.update-password');
     Route::post('/setting/reset-data', [SettingController::class, 'resetData'])->name('setting.reset-data');
-
 });
 
 // Education
@@ -90,19 +87,14 @@ Route::get('/education', [EducationController::class, 'index'])
 Route::get('/education/{id}', [EducationController::class, 'show'])
     ->name('education.show');
 
-// ==================== ROUTE KHUSUS ADMIN ====================
 
-Route::prefix('admin')->middleware('auth')->group(function () {
+// ==================== ROUTE KHUSUS ADMIN ====================
+Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
 
     Route::get('/dashboard', function () {
-        if (Auth::user()->role !== 'admin') {
-            abort(403, 'Akses ditolak! Hanya untuk admin.');
-        }
-
         $totalParents = \App\Models\User::where('role', 'parent')->count();
         $totalActivities = \App\Models\Activity::count();
         $totalContents = \App\Models\LearningContent::count();
-
         return view('admin.dashboard', compact('totalParents', 'totalActivities', 'totalContents'));
     })->name('admin.dashboard');
 

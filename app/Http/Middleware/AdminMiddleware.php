@@ -10,12 +10,10 @@ class AdminMiddleware
 {
     public function handle(Request $request, Closure $next)
     {
-        // Cek apakah user login dan role-nya admin
         if (Auth::check() && Auth::user()->role === 'admin') {
             return $next($request);
         }
-
-        // Jika bukan admin, redirect ke dashboard user dengan pesan error
-        return redirect('/dashboard')->with('error', 'Akses ditolak! Hanya untuk administrator.');
+        
+        abort(403, 'Akses ditolak! Hanya untuk admin.');
     }
 }

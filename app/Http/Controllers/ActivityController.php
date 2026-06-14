@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Activity;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ActivityController extends Controller
 {
@@ -89,5 +90,12 @@ class ActivityController extends Controller
         $activity->delete();
 
         return redirect()->route('activities.index');
+    }
+
+    public function __construct()
+    {
+        if (Auth::user()->role !== 'admin') {
+            abort(403, 'Akses ditolak! Hanya untuk admin.');
+        }
     }
 }
