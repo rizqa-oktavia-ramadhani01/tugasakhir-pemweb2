@@ -355,7 +355,7 @@
                     <div class="category-title">
                         <i class="fa-regular fa-face-smile mr-1"></i> Fitur Anak
                     </div>
-                    <a href="{{ route('learning-contents.index') }}" class="nav-item">
+                    <a href="{{ route('learning-contents.pelafalan') }}" class="nav-item">
                         <i class="fa-solid fa-microphone-alt"></i>
                         <span>Latih Pelafalan</span>
                     </a>
@@ -363,7 +363,7 @@
                         <i class="fa-solid fa-ear-listen"></i>
                         <span>Sound Imitation</span>
                     </a>
-                    <a href="{{ route('learning-contents.index') }}" class="nav-item">
+                    <a href="{{ route('learning-contents.tantangan') }}" class="nav-item">
                         <i class="fa-solid fa-comments"></i>
                         <span>Tantangan Bahasa</span>
                     </a>
