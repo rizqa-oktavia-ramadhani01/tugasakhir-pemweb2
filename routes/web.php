@@ -81,13 +81,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/setting/reset-data', [SettingController::class, 'resetData'])->name('setting.reset-data');
 
     // Education
-Route::get('/education', [EducationController::class, 'index'])
-    ->name('education.index');
+    Route::get('/education', [EducationController::class, 'index'])
+        ->name('education.index');
 
-Route::get('/education/{id}', [EducationController::class, 'show'])
-    ->name('education.show');
+    Route::get('/education/{id}', [EducationController::class, 'show'])
+        ->name('education.show');
 
-// Export PDF Raport
+    // Export PDF Raport
     Route::get('/report-pdf', [ReportController::class, 'generate'])->name('report.pdf');
 });
 
@@ -119,4 +119,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/learning-contents/{id}/edit', [AdminLearningContentController::class, 'edit'])->name('admin.learning-contents.edit');
     Route::put('/learning-contents/{id}', [AdminLearningContentController::class, 'update'])->name('admin.learning-contents.update');
     Route::delete('/learning-contents/{id}', [AdminLearningContentController::class, 'destroy'])->name('admin.learning-contents.destroy');
+    
+    // Export Excel Report
+    Route::get('/export-parents', [App\Http\Controllers\Admin\ReportController::class, 'exportParents'])->name('admin.export.parents');
 });

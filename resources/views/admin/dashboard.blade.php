@@ -39,6 +39,7 @@
         </aside>
 
         <main class="flex-1 p-6">
+            <!-- Header dengan judul dan nama user -->
             <div class="flex justify-between items-center mb-6">
                 <h1 class="text-2xl font-bold">Dashboard Admin</h1>
                 <div class="bg-white px-4 py-2 rounded-lg shadow">
@@ -47,6 +48,16 @@
                 </div>
             </div>
 
+            <!-- TOMBOL EXPORT EXCEL (DITAMBAHKAN DI SINI) -->
+            <div class="mb-6 flex justify-end">
+                <a href="{{ route('admin.export.parents') }}" 
+                   class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg shadow transition flex items-center gap-2">
+                    <i class="fa-solid fa-file-excel"></i>
+                    Export Data Orang Tua ke Excel
+                </a>
+            </div>
+
+            <!-- Kartu Statistik -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div class="bg-white rounded-lg shadow p-6">
                     <div class="flex justify-between items-center">
