@@ -23,10 +23,10 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 ENV COMPOSER_ALLOW_SUPERUSER=1
 RUN composer install --no-dev --optimize-autoloader
 
-# 5. BERSIHKAN CACHE LARAVEL (Agar tidak pakai cache lokal laptopmu yang merusak path)
-RUN php artisan config:clear || true \
-    && php artisan cache:clear || true \
-    && php artisan view:clear || true
+# 5. PAKSA HAPUS CACHE LAMA JIKA TERLANJUR TER-COPY
+RUN rm -f /var/www/html/bootstrap/cache/config.php \
+    && rm -f /var/www/html/bootstrap/cache/services.php \
+    && rm -f /var/www/html/bootstrap/cache/packages.php
 
 # 6. Arahkan Apache ke folder public Laravel
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
