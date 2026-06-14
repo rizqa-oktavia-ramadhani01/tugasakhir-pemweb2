@@ -344,7 +344,8 @@
                         <i class="fa-regular fa-calendar-check"></i>
                         <span>Pantau Progres</span>
                     </a>
-                    <a href="#" class="nav-item">
+                    <a href="{{ route('education.index') }}"
+                        class="nav-item {{ request()->routeIs('education.*') ? 'active' : '' }}">
                         <i class="fa-solid fa-newspaper"></i>
                         <span>Pusat Edukasi</span>
                     </a>
