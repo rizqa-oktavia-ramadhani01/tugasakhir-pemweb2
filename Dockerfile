@@ -38,4 +38,4 @@ RUN mkdir -p /var/www/html/storage/logs \
 EXPOSE 80
 
 # Otomatis jalankan migrasi database saat container dinyalakan menggunakan format JSON args agar aman
-CMD ["sh", "-c", "php artisan migrate --force && apache2-foreground"]
+CMD ["apache2-foreground"]
