@@ -19,7 +19,7 @@
             justify-content: center; /* Posisi tengah horizontal */
             align-items: center;     /* Posisi tengah vertikal */
             font-family: Arial, sans-serif;
-            background: #f4fdfb;     /* Warna latar belakang */
+            background: #e3f2fd;     /* WARNA LATAR BELAKANG (Diubah jadi Biru Muda) */
         }
 
         /* 2. STYLE CONTAINER UTAMA */
@@ -36,7 +36,7 @@
             height: 120px;
             margin: auto;
             border-radius: 50%; /* Membuat kotak jadi bulat */
-            background: #48C9B0;
+            background: #2196f3; /* WARNA LOGO (Diubah jadi Biru Utama) */
             color: white;
             font-size: 50px;
             display: flex;
@@ -53,18 +53,18 @@
         /* 4. STYLE TEKS */
         h1{
             margin-top: 20px;
-            color: #2C3E50;
+            color: #0d47a1; /* WARNA JUDUL (Diubah jadi Biru Gelap) */
         }
 
         p{
             margin-top: 10px;
-            color: #666;
+            color: #1976d2; /* WARNA DESKRIPSI (Diubah jadi Biru Sedang) */
         }
 
         .splash-footer {
             margin-top: 3rem;
             font-size: 0.8rem;
-            color: #bdc3c7;
+            color: #90caf9; /* WARNA FOOTER (Diubah jadi Biru Pucat) */
         }
 
         /* 5. STYLE TOMBOL */
@@ -72,7 +72,7 @@
             display: inline-block;
             margin-top: 25px;
             padding: 12px 25px;
-            background: #48C9B0;
+            background: #2196f3; /* WARNA TOMBOL (Diubah jadi Biru Utama) */
             color: white;
             text-decoration: none;
             border-radius: 8px;
@@ -83,7 +83,7 @@
 
         /* Efek saat mouse diarahkan ke tombol */
         .btn:hover{
-            background: #38b29b; /* Warna sedikit lebih gelap */
+            background: #1976d2; /* WARNA HOVER (Diubah jadi Biru Lebih Gelap) */
             transform: scale(1.05); /* Tombol jadi sedikit lebih besar */
         }
 

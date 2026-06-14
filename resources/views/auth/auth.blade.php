@@ -9,12 +9,21 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
     <style>
-        /* --- 1. VARIABEL WARNA (Sesuai Request) --- */
+        /* --- 1. VARIABEL WARNA (Disesuaikan menjadi Dominan Biru) --- */
         :root {
-            --pink-main: #FA6781;   /* Warna Tombol */
-            --peach-bg: #FFC49D;    /* Warna Panel Geser */
-            --cream-bg: #FAE7CB;    /* Warna Form */
-            --text-dark: #444;
+            /* Warna Tombol: Biru Tua */
+            --pink-main: #1565C0;   
+            
+            /* Warna Panel Geser (Overlay): Biru Medium.
+               Warna ini cukup gelap agar teks putih tetap terbaca jelas di samping. */
+            --peach-bg: #1976D2;    
+            
+            /* Warna Form: Biru Sangat Muda (Light Blue) */
+            --cream-bg: #E3F2FD;    
+            
+            /* Warna Teks: Biru Sangat Gelap */
+            --text-dark: #0D47A1;
+            
             --white: #ffffff;
         }
 
@@ -47,6 +56,7 @@
             line-height: 20px;
             letter-spacing: 0.5px;
             margin: 20px 0 30px;
+            color: var(--text-dark);
         }
 
         span {
@@ -188,11 +198,12 @@
         }
 
         .overlay {
+            /* Warna diambil dari --peach-bg (Biru) */
             background: var(--peach-bg);
             background-repeat: no-repeat;
             background-size: cover;
             background-position: 0 0;
-            color: #ffffff;
+            color: #ffffff; /* Teks putih di atas biru gelap */
             position: relative;
             left: -100%;
             height: 100%;
