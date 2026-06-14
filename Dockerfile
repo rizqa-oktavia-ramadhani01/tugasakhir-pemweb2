@@ -12,28 +12,31 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install pdo pdo_mysql gd zip
 
-# 2. Aktifkan mod_rewrite untuk routing Laravel
+# 2. Aktifkan mod_rewrite untuk routing Apache
 RUN a2enmod rewrite
 
 # 3. Copy semua file projek
 COPY . /var/www/html
 
-# 4. Install Composer & dependensi vendor
+# 4. Amankan file .env di dalam server Docker agar Laravel punya pegangan awal
+RUN cp /var/www/html/.env.production /var/www/html/.env
+
+# 5. Install Composer & dependensi vendor
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 ENV COMPOSER_ALLOW_SUPERUSER=1
 RUN composer install --no-dev --optimize-autoloader
 
-# 5. PAKSA HAPUS CACHE LAMA JIKA TERLANJUR TER-COPY
+# 6. Bersihkan sisa cache lokal laptop secara paksa
 RUN rm -f /var/www/html/bootstrap/cache/config.php \
     && rm -f /var/www/html/bootstrap/cache/services.php \
     && rm -f /var/www/html/bootstrap/cache/packages.php
 
-# 6. Arahkan Apache ke folder public Laravel
+# 7. Arahkan Apache ke folder public Laravel
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
-# 7. Setel permission folder storage & cache secara total
+# 8. Setel permission folder storage & cache secara total
 RUN mkdir -p /var/www/html/storage/framework/cache/data \
     && mkdir -p /var/www/html/storage/framework/sessions \
     && mkdir -p /var/www/html/storage/framework/views \
