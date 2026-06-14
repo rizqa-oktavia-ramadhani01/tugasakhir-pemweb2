@@ -1,6 +1,6 @@
-FROM php:8.2-apache
+FROM php:8.2-cli
 
-# 1. Install dependensi sistem & ekstensi PHP
+# 1. Install dependensi sistem & ekstensi PHP yang dibutuhkan Laravel
 RUN apt-get update && apt-get install -y \
     libpng-dev \
     libjpeg-dev \
@@ -12,13 +12,13 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install pdo pdo_mysql gd zip
 
-# 2. Aktifkan mod_rewrite untuk routing Apache
-RUN a2enmod rewrite
+# 2. Set folder kerja utama
+WORKDIR /var/www/html
 
 # 3. Copy semua file projek
 COPY . /var/www/html
 
-# 4. Amankan file .env di dalam server Docker agar Laravel punya pegangan awal
+# 4. Amankan file .env cadangan agar Laravel punya pegangan awal
 RUN cp /var/www/html/.env.production /var/www/html/.env
 
 # 5. Install Composer & dependensi vendor
@@ -31,12 +31,7 @@ RUN rm -f /var/www/html/bootstrap/cache/config.php \
     && rm -f /var/www/html/bootstrap/cache/services.php \
     && rm -f /var/www/html/bootstrap/cache/packages.php
 
-# 7. Arahkan Apache ke folder public Laravel
-ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
-RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
-RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
-
-# 8. Setel permission folder storage & cache secara total
+# 7. Setel permission folder storage & cache
 RUN mkdir -p /var/www/html/storage/framework/cache/data \
     && mkdir -p /var/www/html/storage/framework/sessions \
     && mkdir -p /var/www/html/storage/framework/views \
@@ -44,9 +39,5 @@ RUN mkdir -p /var/www/html/storage/framework/cache/data \
     && chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
     && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Memaksa Apache menggunakan port dinamis dari Railway lewat environment variable secara langsung
-RUN echo "Listen \${PORT}" > /etc/apache2/ports.conf
-RUN sed -ri -e 's!<VirtualHost \*:80>!<VirtualHost \*:\${PORT}>!g' /etc/apache2/sites-available/*.conf
-RUN sed -ri -e 's!<VirtualHost \*:80>!<VirtualHost \*:\${PORT}>!g' /etc/apache2/apache2.conf
-
-CMD ["apache2-foreground"]
+# 8. Jalankan internal web server Laravel langsung ke PORT dinamis Railway
+CMD php artisan serve --host=0.0.0.0 --port=${PORT}
