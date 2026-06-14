@@ -128,6 +128,11 @@
             </div>
         </div>
     </div>
+    <div class="text-end mb-3">
+        <a href="{{ route('report.pdf') }}" class="btn btn-danger" target="_blank">
+            <i class="bi bi-file-pdf-fill me-2"></i> Download Raport PDF
+        </a>
+    </div>
 </div>
 
 @else

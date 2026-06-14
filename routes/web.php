@@ -14,6 +14,7 @@ use App\Http\Controllers\LogOutController;
 use App\Http\Controllers\ParentJournalController;
 use App\Http\Controllers\ProgressController;
 use App\Http\Controllers\EducationController;
+use App\Http\Controllers\ReportController;
 
 // Admin Controllers
 use App\Http\Controllers\Admin\ActivityController as AdminActivityController;
@@ -78,14 +79,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
     Route::put('/setting/password', [SettingController::class, 'updatePassword'])->name('setting.update-password');
     Route::post('/setting/reset-data', [SettingController::class, 'resetData'])->name('setting.reset-data');
-});
 
-// Education
+    // Education
 Route::get('/education', [EducationController::class, 'index'])
     ->name('education.index');
 
 Route::get('/education/{id}', [EducationController::class, 'show'])
     ->name('education.show');
+
+// Export PDF Raport
+    Route::get('/report-pdf', [ReportController::class, 'generate'])->name('report.pdf');
+});
 
 
 // ==================== ROUTE KHUSUS ADMIN ====================
