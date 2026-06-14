@@ -6,8 +6,8 @@ use App\Models\Children;
 use App\Models\Activity;
 use App\Models\ActivityLog;
 use App\Models\ParentJournal;
-use App\Models\ChildMilestone;
 use App\Models\Milestone;
+use App\Models\ChildMilestone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -74,6 +74,29 @@ class ProgressController extends Controller
             'milestoneProgress',
             'stats'
         ));
+    }
+
+    public function toggleMilestone(Request $request)
+    {
+        $request->validate([
+            'milestone_id' => 'required|exists:milestones,id',
+            'status' => 'required|in:belum_tercapai,tercapai'
+        ]);
+
+        $childId = session('active_child_id');
+
+        ChildMilestone::updateOrCreate(
+            [
+                'child_id' => $childId,
+                'milestone_id' => $request->milestone_id
+            ],
+            [
+                'status' => $request->status,
+                'tanggal_tercapai' => $request->status == 'tercapai' ? now()->toDateString() : null
+            ]
+        );
+
+        return redirect()->back()->with('success', 'Status milestone diperbarui!');
     }
 
     // Hitung streak hari beruntun (aktivitas selesai)
@@ -165,12 +188,21 @@ class ProgressController extends Controller
         $child = Children::find($childId);
         $usiaTahun = $child->usia_anak ?? 2;
 
-        // Ambil milestone berdasarkan kategori usia
-        $usiaCategory = $usiaTahun . '- Tahun';
-        $milestones = Milestone::where('kategori_usia', 'LIKE', $usiaTahun . '%')->get();
+        if ($usiaTahun >= 1 && $usiaTahun < 2) {
+            $kategoriUsia = '1-2 Tahun';
+        } elseif ($usiaTahun >= 2 && $usiaTahun < 3) {
+            $kategoriUsia = '2-3 Tahun';
+        } elseif ($usiaTahun >= 3 && $usiaTahun < 4) {
+            $kategoriUsia = '3-4 Tahun';
+        } elseif ($usiaTahun >= 4 && $usiaTahun < 5) {
+            $kategoriUsia = '4-5 Tahun';
+        } else {
+            $kategoriUsia = '5+ Tahun';
+        }
+
+        $milestones = Milestone::where('kategori_usia', $kategoriUsia)->get();
 
         if ($milestones->isEmpty()) {
-            // Fallback ke milestone 1-3 tahun
             $milestones = Milestone::where('kategori_usia', '1-3 Tahun')->get();
         }
 
@@ -187,13 +219,14 @@ class ProgressController extends Controller
             'completed' => $completedMilestones,
             'total' => $totalMilestones,
             'items' => $milestones->map(function ($m) use ($childId) {
-                $status = ChildMilestone::where('child_id', $childId)
+                $childMilestone = ChildMilestone::where('child_id', $childId)
                     ->where('milestone_id', $m->id)
                     ->first();
                 return [
                     'milestone' => $m->milestone,
-                    'status' => $status->status ?? 'belum',
                     'deskripsi' => $m->deskripsi,
+                    'status' => $childMilestone->status ?? 'belum_tercapai',
+                    'milestone_id' => $m->id,
                 ];
             }),
         ];

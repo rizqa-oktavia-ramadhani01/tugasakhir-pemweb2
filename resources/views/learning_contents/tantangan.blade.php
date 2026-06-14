@@ -113,15 +113,23 @@
                 let semuaOpsi = [itemBenar, ...pilihanSalah];
                 semuaOpsi = acakArray(semuaOpsi);
 
+                // Helper pembetul path agar tidak double slash atau salah deteksi folder
+                const dapatkanPath = (pathMurni) => {
+                    if (!pathMurni) return '';
+                    // Jika data di DB sudah berawalan storage/ atau /storage, bersihkan dulu
+                    let cleanPath = pathMurni.replace(/^\/?(storage\/)?/, '');
+                    return `/storage/${cleanPath}`;
+                };
+
                 return {
                     jawabanBenarId: itemBenar.id,
                     keyword: itemBenar.judul,
                     deskripsi: itemBenar.isi, // Isian bunyi ejaan/suara dari kolom isi konten
-                    audio: itemBenar.audio ? `/storage/${itemBenar.audio}` : '',
+                    audio: dapatkanPath(itemBenar.audio),
                     opsi: semuaOpsi.map(o => ({
                         id: o.id,
                         nama: o.judul,
-                        gambar: o.gambar ? `/storage/${o.gambar}` : ''
+                        gambar: dapatkanPath(o.gambar)
                     }))
                 };
             });
@@ -130,58 +138,66 @@
         }
 
         // Fungsi merender soal ke halaman web
-        function tampilkanSoal() {
-            if (kumpulanSoal.length === 0) return;
+        // Fungsi merender soal ke halaman web
+function tampilkanSoal() {
+    if (kumpulanSoal.length === 0) return;
 
-            const soal = kumpulanSoal[indexSekarang];
+    const soal = kumpulanSoal[indexSekarang];
 
-            // Update teks komponen soal
-            document.getElementById('kuis-progress-text').innerText = `PERTANYAAN ${indexSekarang + 1} DARI 5`;
-            document.getElementById('kuis-keyword').innerText = `"${soal.keyword.toUpperCase()}"`;
-            document.getElementById('kuis-deskripsi').innerText = soal.deskripsi;
-            
-            // Set audio player petunjuk suara
-            const player = document.getElementById('audioKuisPlayer');
-            if (soal.audio) {
-                player.src = soal.audio;
-                // Otomatis putar audio petunjuk saat soal berganti biar interaktif buat anak
-                setTimeout(() => { player.play().catch(e => {}); }, 400);
-            } else {
-                player.removeAttribute('src');
-            }
+    // Update teks komponen soal
+    document.getElementById('kuis-progress-text').innerText = `PERTANYAAN ${indexSekarang + 1} DARI 5`;
+    document.getElementById('kuis-keyword').innerText = `"${soal.keyword.toUpperCase()}"`;
+    document.getElementById('kuis-deskripsi').innerText = soal.deskripsi;
+    
+    // Set audio player petunjuk suara
+    const player = document.getElementById('audioKuisPlayer');
+    if (soal.audio) {
+        player.src = soal.audio;
+        // Otomatis putar audio petunjuk saat soal berganti biar interaktif buat anak
+        setTimeout(() => { player.play().catch(e => console.log("Autoplay dicegah browser, tunggu user klik tombol peri.")); }, 400);
+    } else {
+        player.removeAttribute('src');
+    }
 
-            // Reset box feedback pemberitahuan
-            const feedback = document.getElementById('feedback-kuis');
-            feedback.className = "hidden text-center font-black text-sm py-2.5 rounded-xl transition-all";
+    // Reset box feedback pemberitahuan
+    const feedback = document.getElementById('feedback-kuis');
+    feedback.className = "hidden text-center font-black text-sm py-2.5 rounded-xl transition-all";
 
-            // Render 4 Kartu Opsi Pilihan Gambar
-            const boxOpsi = document.getElementById('box-opsi-jawaban');
-            boxOpsi.innerHTML = '';
+    // Render 4 Kartu Opsi Pilihan Gambar
+    const boxOpsi = document.getElementById('box-opsi-jawaban');
+    boxOpsi.innerHTML = '';
 
-            soal.opsi.forEach(pilihan => {
-                let htmlGambar = pilihan.gambar 
-                    ? `<img src="${pilihan.gambar}" class="w-20 h-20 object-contain mb-3" alt="${pilihan.nama}">`
-                    : `<span class="text-4xl mb-3">🎈</span>`;
-
-                let kartu = document.createElement('div');
-                kartu.className = "opsi-kartu bg-white border-2 border-slate-200/80 rounded-2xl p-5 flex flex-col items-center justify-center text-center cursor-pointer shadow-sm hover:border-indigo-400";
-                kartu.innerHTML = `
-                    ${htmlGambar}
-                    <span class="font-extrabold text-sm text-slate-700 tracking-wide">${pilihan.nama}</span>
-                `;
-                
-                // Tambah event klik cek jawaban
-                kartu.onclick = () => verifikasiJawaban(pilihan.id, kartu);
-                boxOpsi.appendChild(kartu);
-            });
+    soal.opsi.forEach(pilihan => {
+        let kartu = document.createElement('div');
+        kartu.className = "opsi-kartu bg-white border-2 border-slate-200/80 rounded-2xl p-5 flex flex-col items-center justify-center text-center cursor-pointer shadow-sm hover:border-indigo-400";
+        
+        // Logika render: Jika ada file gambar, pasang tag img. Kalau error/gagal load, otomatis ganti jadi balon 🎈
+        if (pilihan.gambar) {
+            kartu.innerHTML = `
+                <img src="${pilihan.gambar}" class="w-24 h-24 object-contain mb-3" alt="${pilihan.nama}" 
+                     onerror="this.onerror=null; this.remove(); const ball = document.createElement('span'); ball.className='text-4xl mb-3'; ball.innerText='🎈'; this.parentElement.prepend(ball);">
+                <span class="font-extrabold text-sm text-slate-700 tracking-wide">${pilihan.nama}</span>
+            `;
+        } else {
+            // Kalau dari awal emang gak ada gambar di database
+            kartu.innerHTML = `
+                <span class="text-4xl mb-3">🎈</span>
+                <span class="font-extrabold text-sm text-slate-700 tracking-wide">${pilihan.nama}</span>
+            `;
         }
+        
+        // Tambah event klik cek jawaban
+        kartu.onclick = () => verifikasiJawaban(pilihan.id, kartu);
+        boxOpsi.appendChild(kartu);
+    });
+}
 
         function putarAudioKuis() {
             const player = document.getElementById('audioKuisPlayer');
             if (player && player.src && player.src !== window.location.href) {
-                player.play();
+                player.play().catch(err => alert("Gagal memutar audio, pastikan file format .mp3/.wav valid!"));
             } else {
-                alert("Waduh, audio petunjuk soal ini belum diunggah!");
+                alert("Waduh, audio petunjuk soal ini belum diunggah atau path salah!");
             }
         }
 

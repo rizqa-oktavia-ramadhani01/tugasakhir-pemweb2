@@ -9,7 +9,12 @@ class ChildMilestone extends Model
     protected $fillable = [
         'child_id',
         'milestone_id',
-        'status'
+        'status',
+        'tanggal_tercapai'
+    ];
+
+    protected $casts = [
+        'tanggal_tercapai' => 'date'
     ];
 
     public function child()

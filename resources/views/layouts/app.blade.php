@@ -356,15 +356,11 @@
                     <div class="category-title">
                         <i class="fa-regular fa-face-smile mr-1"></i> Fitur Anak
                     </div>
-                    <a href="{{ route('learning-contents.index') }}" class="nav-item">
+                    <a href="{{ route('learning-contents.pelafalan') }}" class="nav-item">
                         <i class="fa-solid fa-microphone-alt"></i>
                         <span>Latih Pelafalan</span>
                     </a>
-                    <a href="{{ route('learning-contents.index') }}" class="nav-item">
-                        <i class="fa-solid fa-ear-listen"></i>
-                        <span>Sound Imitation</span>
-                    </a>
-                    <a href="{{ route('learning-contents.index') }}" class="nav-item">
+                    <a href="{{ route('learning-contents.tantangan') }}" class="nav-item">
                         <i class="fa-solid fa-comments"></i>
                         <span>Tantangan Bahasa</span>
                     </a>
@@ -397,10 +393,6 @@
                     <p>{{ now()->translatedFormat('l, d F Y') }}</p>
                 </div>
                 <div class="header-actions">
-                    <button class="notification-btn">
-                        <i class="fa-regular fa-bell"></i>
-                        <span class="badge-dot"></span>
-                    </button>
                     <div class="avatar">
                         {{ substr(Auth::user()->name ?? 'U', 0, 1) }}
                     </div>
