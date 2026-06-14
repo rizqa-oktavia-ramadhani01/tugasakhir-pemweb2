@@ -6,11 +6,14 @@ use App\Models\Children;
 use App\Models\Activity;
 use App\Models\ActivityLog;
 use App\Models\DailyTodo;
+use App\Models\Milestone;
+use App\Models\ChildMilestone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
+
     public function index()
     {
         $childId = session('active_child_id');
@@ -33,18 +36,51 @@ class DashboardController extends Controller
                 'completedTasks' => 0,
                 'totalTasks' => 0,
                 'taskProgressPercent' => 0,
-                'completedMilestones' => 0,
-                'totalMilestones' => 0,
                 'milestoneProgressPercent' => 0
             ]);
         }
 
-        $completedTasks = $child->dailyTodos->where('status', 'completed')->count();
-        $totalTasks = $child->dailyTodos->count();
+        // ========== AKTIVITAS HARIAN ==========
+        // Total aktivitas hari ini (dari daily_todos)
+        $totalTasks = DailyTodo::where('child_id', $child->id)
+            ->where('tanggal', today())
+            ->count();
+
+        // Aktivitas yang sudah selesai (dari activity_logs)
+        $completedTasks = ActivityLog::where('child_id', $child->id)
+            ->whereDate('tanggal', today())
+            ->where('selesai', true)
+            ->count();
+
         $taskProgressPercent = $totalTasks > 0 ? round(($completedTasks / $totalTasks) * 100) : 0;
 
-        $completedMilestones = $child->childMilestones->where('status', 'tercapai')->count();
-        $totalMilestones = $child->childMilestones->count();
+        // ========== PROGRES MILESTONE ==========
+        $usiaTahun = $child->usia_anak ?? 2;
+
+        if ($usiaTahun >= 1 && $usiaTahun < 2) {
+            $kategoriUsia = '1-2 Tahun';
+        } elseif ($usiaTahun >= 2 && $usiaTahun < 3) {
+            $kategoriUsia = '2-3 Tahun';
+        } elseif ($usiaTahun >= 3 && $usiaTahun < 4) {
+            $kategoriUsia = '3-4 Tahun';
+        } elseif ($usiaTahun >= 4 && $usiaTahun < 5) {
+            $kategoriUsia = '4-5 Tahun';
+        } else {
+            $kategoriUsia = '5+ Tahun';
+        }
+
+        $milestones = Milestone::where('kategori_usia', $kategoriUsia)->get();
+
+        if ($milestones->isEmpty()) {
+            $milestones = Milestone::where('kategori_usia', '5+ Tahun')->get();
+        }
+
+        $totalMilestones = $milestones->count();
+        $completedMilestones = ChildMilestone::where('child_id', $child->id)
+            ->whereIn('milestone_id', $milestones->pluck('id'))
+            ->where('status', 'tercapai')
+            ->count();
+
         $milestoneProgressPercent = $totalMilestones > 0 ? round(($completedMilestones / $totalMilestones) * 100) : 0;
 
         return view('dashboard.dashboard', compact(
@@ -52,8 +88,6 @@ class DashboardController extends Controller
             'completedTasks',
             'totalTasks',
             'taskProgressPercent',
-            'completedMilestones',
-            'totalMilestones',
             'milestoneProgressPercent'
         ));
     }
