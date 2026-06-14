@@ -44,8 +44,9 @@ RUN mkdir -p /var/www/html/storage/framework/cache/data \
     && chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
     && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Hapus EXPOSE 80, ganti dengan setelan port dinamis Apache
-RUN sed -i 's/Listen 80/Listen ${PORT}/g' /etc/apache2/ports.conf
-RUN sed -i 's/<VirtualHost \*:80>/<VirtualHost \*:${PORT}>/g' /etc/apache2/sites-available/*.conf
+# Memaksa Apache menggunakan port dinamis dari Railway lewat environment variable secara langsung
+RUN echo "Listen \${PORT}" > /etc/apache2/ports.conf
+RUN sed -ri -e 's!<VirtualHost \*:80>!<VirtualHost \*:\${PORT}>!g' /etc/apache2/sites-available/*.conf
+RUN sed -ri -e 's!<VirtualHost \*:80>!<VirtualHost \*:\${PORT}>!g' /etc/apache2/apache2.conf
 
 CMD ["apache2-foreground"]
